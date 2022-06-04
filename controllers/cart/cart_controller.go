@@ -15,3 +15,8 @@ func GetCartById(c *gin.Context) {
 	var cartDto dto.CartDto
 	c.JSON(http.StatusOK, cartDto)
 }
+
+func InsertCart(c *gin.Context) {
+
+	return
+}

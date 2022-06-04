@@ -12,7 +12,7 @@ func GetProductById(c *gin.Context) {
 
 	var productDto dto.ProductDto
 	productDto.Name = "Jose"
-	productDto.Id = "123ABC"
+	productDto.ProductId = 1
 	productDto.Picture = "imagen.net"
 	productDto.Price = 300
 	productDto.CurrencyId = "ARS"

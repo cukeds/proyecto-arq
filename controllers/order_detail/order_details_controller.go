@@ -1,10 +1,10 @@
 package orderDetailController
 
 import (
-	"mvc-go/dto"
-	"net/http"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
+	"mvc-go/dto"
+	"net/http"
 )
 
 func GetOrderDetailById(c *gin.Context) {
@@ -15,7 +15,7 @@ func GetOrderDetailById(c *gin.Context) {
 	// Dummy product
 	var Product dto.ProductDto
 	Product.Name = "Jose"
-	Product.Id = "123ABC"
+	Product.ProductId = 1
 	Product.Picture = "imagen.net"
 	Product.Price = 300
 	Product.CurrencyId = "ARS"

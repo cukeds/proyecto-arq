@@ -1,7 +1,7 @@
 package dto
 
 type ProductDto struct {
-	Id   string      `json:"product_id"`
+	ProductId   int         `json:"product_id"`
 	Category    CategoryDto `json:"category"`
 	Name        string      `json:"name"`
 	Description string      `json:"description"`

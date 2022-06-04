@@ -33,7 +33,7 @@ func GetOrderById(c *gin.Context) {
 	// Dummy Product
 	var Product dto.ProductDto
 	Product.Name = "Jose"
-	Product.Id = "123ABC"
+	Product.ProductId = 1
 	Product.Picture = "imagen.net"
 	Product.Price = 300
 	Product.CurrencyId = "ARS"

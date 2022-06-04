@@ -1,13 +1,13 @@
 package app
 
 import (
+	addressController "mvc-go/controllers/address"
+	cartController "mvc-go/controllers/cart"
+	categoryController "mvc-go/controllers/category"
 	orderController "mvc-go/controllers/order"
 	orderDetailController "mvc-go/controllers/order_detail"
 	productController "mvc-go/controllers/product"
 	userController "mvc-go/controllers/user"
-	categoryController "mvc-go/controllers/category"
-	addressController "mvc-go/controllers/address"
-	cartController "mvc-go/controllers/cart"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -24,6 +24,7 @@ func mapUrls() {
 
 	// Orders Mapping
 	router.GET("/order/:id", orderController.GetOrderById)
+	// maybe: router.GET("/order, orderController.GetOrders")
 	router.POST("/order", orderController.OrderInsert)
 
 	// OrderDetails Mapping
@@ -32,6 +33,7 @@ func mapUrls() {
 
 	// Address Mapping
 	router.GET("/address/:id", addressController.GetAddressById)
+	// maybe: router.GET("/address, addressController.GetAddresses")
 	router.POST("/address", addressController.AddressInsert)
 
 	// Category Mapping
@@ -40,8 +42,8 @@ func mapUrls() {
 
 	// Cart Mapping
 	router.GET("/cart/:id", cartController.GetCartById)
-
-
+	// maybe: router.GET("/cart, cartController.GetCarts")
+	router.POST("/cart", cartController.InsertCart)
 
 	log.Info("Finishing mappings configurations")
 }
