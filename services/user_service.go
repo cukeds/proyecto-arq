@@ -5,6 +5,8 @@ import (
 	"mvc-go/dto"
 	"mvc-go/model"
 	e "mvc-go/utils/errors"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type userService struct{}
@@ -13,6 +15,7 @@ type userServiceInterface interface {
 	GetUserById(id int) (dto.UserDto, e.ApiError)
 	GetUsers() (dto.UsersDto, e.ApiError)
 	InsertUser(userDto dto.UserDto) (dto.UserDto, e.ApiError)
+	Login(loginDto dto.LoginDto) (dto.LoginResponseDto, e.ApiError)
 }
 
 var (
@@ -71,4 +74,23 @@ func (s *userService) InsertUser(userDto dto.UserDto) (dto.UserDto, e.ApiError) 
 	userDto.UserId = user.UserId
 
 	return userDto, nil
+}
+
+func (s *userService) Login(loginDto dto.LoginDto) (dto.LoginResponseDto, e.ApiError) {
+
+	var user model.User
+
+	user, err := userClient.GetUserByUsername(loginDto.Username)
+
+	var loginResponseDto dto.LoginResponseDto
+	loginResponseDto.UserId = -1
+	if err != nil {
+		return loginResponseDto, e.NewBadRequestApiError("Usuario no encontrado")
+	}
+	if user.Password != loginDto.Password {
+		return loginResponseDto, e.NewUnauthorizedApiError("Contraseña incorrecta")
+	}
+	loginResponseDto.UserId = user.UserId
+	log.Debug(loginResponseDto)
+	return loginResponseDto, nil
 }

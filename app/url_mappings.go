@@ -45,5 +45,8 @@ func mapUrls() {
 	// maybe: router.GET("/cart, cartController.GetCarts")
 	router.POST("/cart", cartController.InsertCart)
 
+	// Login Mapping
+	router.POST("/login", userController.Login)
+
 	log.Info("Finishing mappings configurations")
 }

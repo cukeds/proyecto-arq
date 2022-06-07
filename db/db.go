@@ -1,13 +1,13 @@
 package db
 
 import (
-	userClient "mvc-go/clients/user"
-	productClient "mvc-go/clients/product"
+	addressClient "mvc-go/clients/address"
+	cartClient "mvc-go/clients/cart"
+	categoryClient "mvc-go/clients/category"
 	orderClient "mvc-go/clients/order"
 	orderDetailClient "mvc-go/clients/order_detail"
-	categoryClient "mvc-go/clients/category"
-	cartClient "mvc-go/clients/cart"
-	addressClient "mvc-go/clients/address"
+	productClient "mvc-go/clients/product"
+	userClient "mvc-go/clients/user"
 	"mvc-go/model"
 
 	"github.com/jinzhu/gorm"
@@ -22,7 +22,7 @@ var (
 
 func init() {
 	// DB Connections Paramters
-	DBName := "cart"
+	DBName := "carrito de compra"
 	DBUser := "root"
 	DBPass := ""
 	DBHost := "localhost"

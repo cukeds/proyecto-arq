@@ -58,3 +58,18 @@ func UserInsert(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, userDto)
 }
+
+func Login(c *gin.Context) {
+	var loginDto dto.LoginDto
+	c.BindJSON(&loginDto)
+	log.Debug(loginDto)
+
+	var loginResponseDto dto.LoginResponseDto
+	loginResponseDto, err := service.UserService.Login(loginDto)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, loginResponseDto)
+}

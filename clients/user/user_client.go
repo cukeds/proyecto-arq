@@ -17,6 +17,16 @@ func GetUserById(id int) model.User {
 	return user
 }
 
+func GetUserByUsername(username string) (model.User, error) {
+	var user model.User
+	result := Db.Where("username = ?", username).First(&user)
+	if result.Error != nil {
+		return user, result.Error
+	}
+
+	return user, nil
+}
+
 func GetUsers() model.Users {
 	var users model.Users
 	Db.Find(&users)

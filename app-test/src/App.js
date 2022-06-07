@@ -2,36 +2,34 @@ import React, { useState } from "react";
 import logo from './logo.svg';
 import "./App.css";
 
-async function getUserByID(username, password) {
-  return fetch('http://127.0.0.1:8090/login/', {
-    method: 'GET',
+async function login(username, password) {
+  return await fetch('http://127.0.0.1:8090/login', {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-	body: {
-		"username": username,
-		"password": password
-	}
+	body: JSON.stringify({"username": username, "password":password})
   })
-    .then(data => data.json())
+    .then(response => {
+      if (response.status == 400 || response.status == 401)
+      {
+        return {"user_id": -1}
+      }
+      return response.json()
+    })
+    .then(response => {
+      if(response.user_id > -1){
+        document.cookie = "userid=" + response.user_id
+      }
+
+        // Manejar errores if(response.user_id == -1)
+    })
  }
  
 function App() {
   // React States
   const [errorMessages, setErrorMessages] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  // User Login info
-  const database = [
-    {
-      username: "Javier",
-      password: "Contraseña"
-    },
-    {
-      username: "user2",
-      password: "pass2"
-    }
-  ];
 
   const errors = {
     uname: "Usuario Invalido",
@@ -45,21 +43,9 @@ function App() {
     var { uname, pass } = document.forms[0];
 
     // Find user login info
-    const userData = database.find((user) => user.username === uname.value);
-
-    // Compare user info
-    if (userData) {
-      if (userData.password !== pass.value) {
-        // Invalid password
-        setErrorMessages({ name: "pass", message: errors.pass });
-      } else {
-        setIsSubmitted(true);
-      }
-    } else {
-      // Username not found
-      setErrorMessages({ name: "uname", message: errors.uname });
-    }
-  };
+    const userData = login(uname.value, pass.value)
+  }; 
+  
 
   // Generate JSX code for error message
   const renderErrorMessage = (name) =>
@@ -73,12 +59,12 @@ function App() {
       <form onSubmit={handleSubmit}>
         <div className="input-container">
           <label>Usuario </label>
-          <input type="text" name="uname" required />
+          <input type="text" name="uname" placeholder="Usuario" required />
           {renderErrorMessage("uname")}
         </div>
         <div className="input-container">
           <label>Contraseña</label>
-          <input type="password" name="pass" required />
+          <input type="password" name="pass" placeholder="Contraseña" required />
           {renderErrorMessage("pass")}
         </div>
         <div className="button-container">
@@ -91,8 +77,8 @@ function App() {
   return (
     <div className="app">
       <div className="login-form">
-        <div className="title">Sign In</div>
-        {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
+        <div className="title">BIENVENIDOS</div>
+        {isSubmitted ? <div>bienvenido de nuevo</div> : renderForm}
       </div>
     </div>
   );
