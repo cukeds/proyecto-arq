@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import logo from './logo.svg';
 import "./App.css";
-/*
-async function getUserByID(id) {
-  return fetch('http://127.0.0.1:8090/user/' + id, {
+
+async function getUserByID(username, password) {
+  return fetch('http://127.0.0.1:8090/login/', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
-    }
+    },
+	body: {
+		"username": username,
+		"password": password
+	}
   })
     .then(data => data.json())
  }
- */
+ 
 function App() {
   // React States
   const [errorMessages, setErrorMessages] = useState({});
