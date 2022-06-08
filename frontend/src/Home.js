@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import "./Home.css";
+import "./css/Home.css";
+import logo from "./images/logo.svg"
 import Cookies from "universal-cookie";
 
 const Cookie = new Cookies();
@@ -14,6 +15,15 @@ async function getUserById(id){
 
 }
 
+function goto(path){
+  window.location = window.location.origin + path
+}
+
+
+function gotologin(){
+  goto("/login")
+}
+
 function Home() {
   const [isLogged, setIsLogged] = useState(false)
   const [user, setUser] = useState({})
@@ -26,8 +36,11 @@ function Home() {
 
   return (
     <div className="home">
-        <div className="title">Bienvenido</div>
-        {isLogged > -1 ? user.first_name : <p> USUARIO</p>}
+      <div className="topnav">
+        <img src={logo} width="64px" height="64px" />
+        <input type="text" id="search" placeholder="Search..."/>
+        <a id="login" onClick={gotologin}>Login</a>
+      </div>
     </div>
   );
 }

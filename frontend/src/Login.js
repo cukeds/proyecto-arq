@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Login.css";
+import "./css/Login.css";
 import Cookies from "universal-cookie";
 
 const Cookie = new Cookies();
@@ -21,6 +21,7 @@ async function login(username, password) {
     })
     .then(response => {
       Cookie.set("user_id", response.user_id, {path: '/'})
+      Cookie.set("username", username, {path: '/login'})
     })
  }
 
@@ -78,6 +79,7 @@ function Login() {
         </div>
       </form>
     </div>
+
   );
 
   return (
@@ -86,7 +88,7 @@ function Login() {
       <div className="login-form">
         <div className="title">BIENVENIDOS</div>
 
-        {isSubmitted ? <div>usuario</div> : renderForm}
+        {isSubmitted || Cookie.get("user_id") > -1 ? Cookie.get("username") : renderForm}
       </div>
     </div>
   );
