@@ -2,13 +2,14 @@ package productController
 
 import (
 	"mvc-go/dto"
+	service "mvc-go/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func GetProductById(c *gin.Context) {
-	c.JSON(http.StatusOK, "Buscando: " + c.Param("product_id"))
+	c.JSON(http.StatusOK, "Buscando: "+c.Param("product_id"))
 
 	var productDto dto.ProductDto
 	productDto.Name = "Jose"
@@ -21,5 +22,14 @@ func GetProductById(c *gin.Context) {
 }
 
 func GetProducts(c *gin.Context) {
-	c.JSON(http.StatusOK, "")
+
+	var productsDto dto.ProductsDto
+	productsDto, err := service.ProductService.GetProducts()
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, productsDto)
 }

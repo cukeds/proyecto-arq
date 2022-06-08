@@ -15,7 +15,7 @@ import (
 func mapUrls() {
 	// Products Mapping
 	router.GET("/product/:product_id", productController.GetProductById)
-	router.GET("/product", productController.GetProducts)
+	router.GET("/products", productController.GetProducts)
 
 	// Users Mapping
 	router.GET("/user/:id", userController.GetUserById)

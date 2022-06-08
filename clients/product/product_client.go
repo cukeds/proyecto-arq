@@ -25,14 +25,3 @@ func GetProducts() model.Products {
 
 	return products
 }
-
-// func InsertProduct(product model.Product) model.Product {
-// 	result := Db.Create(&product)
-//
-// 	if result.Error != nil {
-// 		//TODO Manage Errors
-// 		log.Error("")
-// 	}
-// 	log.Debug("Product Created: ", product.ProductId)
-// 	return product
-// }
