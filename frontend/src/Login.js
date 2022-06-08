@@ -21,10 +21,13 @@ async function login(username, password) {
     })
     .then(response => {
       Cookie.set("user_id", response.user_id, {path: '/'})
-      
     })
  }
- 
+
+function goto(path){
+  window.location = window.location.origin + path
+}
+
 function Login() {
   // React States
   const [errorMessages, setErrorMessages] = useState({});
@@ -39,15 +42,16 @@ function Login() {
     var { uname, pass } = document.forms[0];
 
     // Find user login info
-    const userData = login(uname.value, pass.value)
-    if (Cookie.get("user_id") > -1) {
-      setIsSubmitted(true)
-    }
-    if (Cookie.get("user_id") == -1) {
-      setErrorMessages({name: "default", message: error})
-    }
-  }; 
-  
+    const userData = login(uname.value, pass.value).then(data => {
+      if (Cookie.get("user_id") > -1) {
+        goto("/")
+      }
+      else if (Cookie.get("user_id") == -1) {
+        setErrorMessages({name: "default", message: error})
+      }
+    })
+  };
+
 
   // Generate JSX code for error message
   const renderErrorMessage = (name) =>
@@ -67,7 +71,7 @@ function Login() {
           <label>Contraseña</label>
           <input type="password" name="pass" placeholder="Contraseña" required />
         </div>
-          
+
           {renderErrorMessage("default")}
         <div className="button-container">
           <input type="submit" />
@@ -82,7 +86,7 @@ function Login() {
       <div className="login-form">
         <div className="title">BIENVENIDOS</div>
 
-        {isSubmitted ? <p>Hola</p> : renderForm}
+        {isSubmitted ? <div>usuario</div> : renderForm}
       </div>
     </div>
   );

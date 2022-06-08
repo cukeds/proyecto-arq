@@ -22,7 +22,7 @@ var (
 
 func init() {
 	// DB Connections Paramters
-	DBName := "carrito de compra"
+	DBName := "cart"
 	DBUser := "root"
 	DBPass := ""
 	DBHost := "localhost"
