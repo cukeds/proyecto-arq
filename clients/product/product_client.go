@@ -25,3 +25,11 @@ func GetProducts() model.Products {
 
 	return products
 }
+
+func GetProductsByCategoryId(id int) model.Products {
+	var products model.Products
+	Db.Where("category_id = ?", id).Find(&products)
+	log.Debug("Products", products)
+
+	return products
+}

@@ -33,6 +33,24 @@ async function getProducts(){
   }).then(response => response.json())
 }
 
+async function getProductsByCategoryId(id){
+  return await fetch('http://127.0.0.1:8090/products/' + id, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }).then(response => response.json())
+}
+
+async function getCategoryById(id){
+  return await fetch('http://127.0.0.1:8090/category/' + id, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }).then(response => response.json())
+}
+
 function goto(path){
   window.location = window.location.origin + path
 }
@@ -44,11 +62,15 @@ function gotologin(){
 
 
 function retry() {
-  Home();
+  goto("/")
 }
 
-function showCategories(categories) {
-  return categories.map((category, i) => <a obj={category} key={category.category_id}>{category.name}</a>)
+function productsByCategoryId(id, setter, categorySetter) {
+  getProductsByCategoryId(id).then(response => {setter(response); Cookie.set("category", id); getCategoryById(id).then(category => categorySetter(category))})
+}
+
+function showCategories(categories, setter, categorySetter) {
+  return categories.map((category, i) => <a onClick={() => productsByCategoryId(category.category_id, setter, categorySetter)} obj={category} key={category.category_id}>{category.name}</a>)
 }
 
 function showProducts(products){
@@ -97,12 +119,17 @@ function search(){
 
 }
 
+function deleteCategory(){
+  Cookie.set("category", 0, {path: "/"})
+  goto("/")
+}
 
 function Home() {
   const [isLogged, setIsLogged] = useState(false)
   const [user, setUser] = useState({})
   const [categories, setCategories] = useState([])
   const [products, setProducts] = useState([])
+  const [category, setCategory] = useState("")
 
 
   if (Cookie.get("user_id") > -1 && !isLogged){
@@ -115,7 +142,8 @@ function Home() {
   }
 
   if(categories.length <= 0){
-    getCategories().then(response => setCategories(response))
+    getCategories().then(response => {setCategories(response)})
+
   }
 
   if (products.length <= 0){
@@ -133,10 +161,11 @@ function Home() {
 
       <div id="mySidenav" className="sidenav">
 
-        {categories.length > 0 ? showCategories(categories) : <a onClick={retry}> Loading Failed. Click to retry </a>}
+        {categories.length > 0 ? showCategories(categories, setProducts, setCategory) : <a onClick={retry}> Loading Failed. Click to retry </a>}
       </div>
 
       <div id="main">
+        {Cookie.get("category") > 0 ? <a className="categoryFilter"> {category.name} <button className="delete" onClick={deleteCategory}>X</button> </a> : <a/>}
         {products.length > 0 ? showProducts(products) : <a> Nothing to show :( </a>}
 
 

@@ -17,7 +17,7 @@ func GetCategoryById(id int) model.Category {
 	return category
 }
 
-func GetCategoriesInfo() model.Categories {
+func GetCategories() model.Categories {
 	var categories model.Categories
 	Db.Find(&categories)
 

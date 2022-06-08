@@ -31,7 +31,7 @@ func (s *userService) GetUserById(id int) (dto.UserDto, e.ApiError) {
 	var user model.User = userClient.GetUserById(id)
 	var userDto dto.UserDto
 
-	if user.UserId == 0 {
+	if user.UserId < 0 {
 		return userDto, e.NewBadRequestApiError("user not found")
 	}
 	userDto.FirstName = user.FirstName

@@ -16,6 +16,7 @@ func mapUrls() {
 	// Products Mapping
 	router.GET("/product/:product_id", productController.GetProductById)
 	router.GET("/products", productController.GetProducts)
+	router.GET("/products/:category_id", productController.GetProductsByCategoryId)
 
 	// Users Mapping
 	router.GET("/user/:id", userController.GetUserById)
@@ -38,7 +39,7 @@ func mapUrls() {
 
 	// Category Mapping
 	router.GET("/category/:id", categoryController.GetCategoryById)
-	router.GET("/categories", categoryController.GetCategoriesInfo)
+	router.GET("/categories", categoryController.GetCategories)
 
 	// Cart Mapping
 	router.GET("/cart/:id", cartController.GetCartById)
