@@ -74,14 +74,47 @@ function showCategories(categories, setter, categorySetter) {
   return categories.map((category, i) => <a onClick={() => productsByCategoryId(category.category_id, setter, categorySetter)} obj={category} key={category.category_id}>{category.name}</a>)
 }
 
-function showProducts(products){
-  return products.map((product, i) =>
+function addToCart(id, setCartItems){
+  let cookie = Cookie.get("cart");
+  if(cookie == undefined){
+    Cookie.set("cart", id + ",1;", {path: "/"});
+    return
+  }
+  let newCookie = ""
+  let isNewItem = true
+  let toCompare = cookie.split(";")
+  let total = 1;
+  toCompare.forEach((item) => {
+    if(item != ""){
+      let array = item.split(",")
+      let item_id = array[0]
+      let item_quantity = array[1]
+      if(id == item_id){
+        item_quantity = Number(item_quantity) + 1
+        isNewItem = false
+      }
+      newCookie += item_id + "," + item_quantity + ";"
+      total += Number(item_quantity);
+    }
+  });
+  if(isNewItem){
+    newCookie += id + ",1;"
+  }
+  cookie = newCookie
+  Cookie.set("cart", cookie)
+  setCartItems(total)
+  return
+}
+
+function showProducts(products, setCartItems){
+  return products.map((product) =>
 
    <div obj={product} key={product.product_id} className="product">
     <div>
       <img width="128px" height="128px" src={"./images/" + product.picture_url}/>
     </div>
     <a className="name">{product.name}</a>
+    <a className="addcart" onClick={() => addToCart(product.product_id, setCartItems)}>Add to Cart</a>
     <a className="price">{product.currency_id + "$" + product.base_price}</a>
     <div>
       <a className="description">{product.description}</a>
@@ -129,12 +162,14 @@ function gotocart(){
   goto("/cart")
 }
 
+
 function Home() {
   const [isLogged, setIsLogged] = useState(false)
   const [user, setUser] = useState({})
   const [categories, setCategories] = useState([])
   const [products, setProducts] = useState([])
   const [category, setCategory] = useState("")
+  const [cartItems, setCartItems] = useState("")
 
 
   if (Cookie.get("user_id") > -1 && !isLogged){
@@ -147,8 +182,7 @@ function Home() {
   }
 
   if(categories.length <= 0){
-    getCategories().then(response => {setCategories(response)})
-
+    getCategories().then(response => setCategories(response))
   }
 
   if (products.length <= 0){
@@ -159,6 +193,7 @@ function Home() {
 
     <span>
     <img src={cart} onClick={gotocart} id="cart" width="48px" height="48px"/>
+    <span className="cartNumber">{Cookie.get("cart") != undefined ? cartItems > 0 ? cartItems : "" : ""}</span>
     <a id="logout" onClick={logout}> <span> Welcome in {user.first_name} </span> </a>
     </span>
   )
@@ -166,7 +201,7 @@ function Home() {
   return (
     <div className="home">
       <div className="topnav">
-        <img src={logo} width="64px" height="64px" />
+        <img src={logo} width="80px" height="80px" />
         <input type="text" id="search" placeholder="Search..." onChange={search}/>
         {isLogged ? login : <a id="login" onClick={gotologin}>Login</a>}
       </div>
@@ -179,7 +214,7 @@ function Home() {
 
       <div id="main">
         {Cookie.get("category") > 0 ? <a className="categoryFilter"> {category.name} <button className="delete" onClick={deleteCategory}>X</button> </a> : <a/>}
-        {products.length > 0 ? showProducts(products) : <a> Nothing to show :( </a>}
+        {products.length > 0 ? showProducts(products, setCartItems) : <a> Nothing to show :( </a>}
 
 
       </div>

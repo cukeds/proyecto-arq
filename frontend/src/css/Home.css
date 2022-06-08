@@ -2,6 +2,8 @@
   overflow: hidden;
   background-color: #090909;
   text-align: right;
+  position: sticky;
+  top: 0;
 }
 
 /* Style the links inside the navigation bar */
@@ -32,6 +34,7 @@
 }
 
 .topnav span {
+  padding-top: 5px;
   float: right;
 }
 
@@ -40,11 +43,27 @@
   display: inline-block;
   padding: 6px;
   border: none;
-  margin-top: 8px;
+  margin-top: 16px;
   margin-right: 30%;
   font-size: 22px;
   width: 33%;
 }
+
+.topnav .cartNumber{
+  color: black;
+  font-weight: bold;
+  text-align:center;
+  border: 2px solid blue;
+  background-color: lightblue;
+  border-radius: 50%;
+  width: 30px;
+  height: 25px;
+  position: absolute;
+  margin-top: 30px;
+  margin-left: -20px;
+
+}
+
 
 /* The side navigation menu */
 .sidenav {
@@ -147,6 +166,23 @@
 .product .stock {
   display: block;
   font-size: 16px;
+}
+
+.product .addcart {
+  float: right;
+  border: 2px solid #e0b155;
+  box-shadow: #696969 2px 2px;
+  border-radius: 20px;
+  background-color: #ebf453;
+  padding: 5px 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.product .addcart:hover{
+  transition: 0.2s;
+  border-color: #936500;
+  background-color: orange;
 }
 
 #logout {
