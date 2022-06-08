@@ -31,6 +31,10 @@
   float: left;
 }
 
+.topnav span {
+  float: right;
+}
+
 /* Style the search box inside the navigation bar */
 .topnav input[type=text] {
   display: inline-block;
@@ -183,4 +187,16 @@
   font-weight: 1000;
   font-size: 18px;
   vertical-align: baseline;
+}
+
+#cart {
+  cursor: pointer;
+  vertical-align: middle;
+  padding: 10px;
+  filter: invert(83%) sepia(96%) saturate(0%) hue-rotate(30deg) brightness(111%) contrast(103%);
+}
+
+#cart:hover {
+  transition: .2s;
+  filter: invert(76%) sepia(56%) saturate(2133%) hue-rotate(226deg) brightness(105%) contrast(101%);
 }

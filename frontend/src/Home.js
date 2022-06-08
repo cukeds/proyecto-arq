@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./css/Home.css";
 import logo from "./images/logo.svg"
+import cart from "./images/cart.svg"
 import Cookies from "universal-cookie";
 
 const Cookie = new Cookies();
@@ -124,6 +125,10 @@ function deleteCategory(){
   goto("/")
 }
 
+function gotocart(){
+  goto("/cart")
+}
+
 function Home() {
   const [isLogged, setIsLogged] = useState(false)
   const [user, setUser] = useState({})
@@ -150,12 +155,20 @@ function Home() {
     getProducts().then(response => {setProducts(response)})
   }
 
+  const login = (
+
+    <span>
+    <img src={cart} onClick={gotocart} id="cart" width="48px" height="48px"/>
+    <a id="logout" onClick={logout}> <span> Welcome in {user.first_name} </span> </a>
+    </span>
+  )
+
   return (
     <div className="home">
       <div className="topnav">
         <img src={logo} width="64px" height="64px" />
         <input type="text" id="search" placeholder="Search..." onChange={search}/>
-        {isLogged ? <a id="logout" onClick={logout}> <span> Welcome in {user.first_name} </span> </a> : <a id="login" onClick={gotologin}>Login</a>}
+        {isLogged ? login : <a id="login" onClick={gotologin}>Login</a>}
       </div>
 
 
