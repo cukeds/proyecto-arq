@@ -38,7 +38,7 @@ func mapUrls() {
 
 	// Category Mapping
 	router.GET("/category/:id", categoryController.GetCategoryById)
-	router.GET("/categories", categoryController.GetCategories)
+	router.GET("/categories", categoryController.GetCategoriesInfo)
 
 	// Cart Mapping
 	router.GET("/cart/:id", cartController.GetCartById)

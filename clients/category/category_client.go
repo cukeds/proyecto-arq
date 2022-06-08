@@ -17,7 +17,7 @@ func GetCategoryById(id int) model.Category {
 	return category
 }
 
-func GetCategories() model.Categories {
+func GetCategoriesInfo() model.Categories {
 	var categories model.Categories
 	Db.Find(&categories)
 
@@ -25,14 +25,3 @@ func GetCategories() model.Categories {
 
 	return categories
 }
-
-// func InsertCategory(category model.Category) model.Category {
-// 	result := Db.Create(&category)
-//
-// 	if result.Error != nil {
-// 		//TODO Manage Errors
-// 		log.Error("")
-// 	}
-// 	log.Debug("Category Created: ", category.CategoryId)
-// 	return category
-// }
