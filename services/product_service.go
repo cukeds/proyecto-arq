@@ -30,9 +30,18 @@ func (s *productService) GetProductById(id int) (dto.ProductDto, e.ApiError) {
 	var product model.Product = productClient.GetProductById(id)
 	var productDto dto.ProductDto
 
-	if product.ProductId == 0 {
+	if product.ProductId < 0 {
 		return productDto, e.NewBadRequestApiError("product not found")
 	}
+
+	productDto.ProductId = product.ProductId
+	productDto.Category, _ = CategoryService.GetCategoryById(product.CategoryId)
+	productDto.Name = product.Name
+	productDto.Description = product.Description
+	productDto.Price = product.Price
+	productDto.CurrencyId = product.CurrencyId
+	productDto.Stock = product.Stock
+	productDto.Picture = product.Picture
 
 	return productDto, nil
 }

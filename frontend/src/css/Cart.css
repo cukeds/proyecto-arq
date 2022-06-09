@@ -31,8 +31,13 @@
   float: left;
 }
 
-.product {
+.emptySpace {
   display: block;
+  height: 80px;
+}
+
+.product {
+  display: inline-block;
   width: 70%;
   min-height: 200px;
   border: 2px solid black;
@@ -89,6 +94,28 @@
 .product .stock {
   display: block;
   font-size: 16px;
+}
+
+.quantity{
+  display: inline-block;
+  vertical-align: middle;
+  padding-left: 20px;
+}
+
+.quantity .amount {
+  display: block;
+}
+
+.quantity .number {
+  display:block;
+  font-size: 30px;
+  margin-top: -15%;
+}
+
+.quantity .subtotal {
+  display: block;
+  font-size: 20px;
+  margin-top: 20px;
 }
 
 #logout {

@@ -76,14 +76,16 @@ function showCategories(categories, setter, categorySetter) {
 
 function addToCart(id, setCartItems){
   let cookie = Cookie.get("cart");
+
   if(cookie == undefined){
     Cookie.set("cart", id + ",1;", {path: "/"});
+    setCartItems(1)
     return
   }
   let newCookie = ""
   let isNewItem = true
   let toCompare = cookie.split(";")
-  let total = 1;
+  let total = 0;
   toCompare.forEach((item) => {
     if(item != ""){
       let array = item.split(",")
@@ -99,9 +101,11 @@ function addToCart(id, setCartItems){
   });
   if(isNewItem){
     newCookie += id + ",1;"
+    total += 1;
   }
   cookie = newCookie
-  Cookie.set("cart", cookie)
+  Cookie.set("cart", cookie, {path: "/"})
+  Cookie.set("cartItems", total, {path: "/"})
   setCartItems(total)
   return
 }
@@ -189,11 +193,15 @@ function Home() {
     getProducts().then(response => {setProducts(response)})
   }
 
+  if (!cartItems && Cookie.get("cartItems")){
+    setCartItems(Cookie.get("cartItems"))
+  }
+
   const login = (
 
     <span>
     <img src={cart} onClick={gotocart} id="cart" width="48px" height="48px"/>
-    <span className="cartNumber">{Cookie.get("cart") != undefined ? cartItems > 0 ? cartItems : "" : ""}</span>
+    <span className="cartNumber">{cartItems > 0 ? cartItems : 0}</span>
     <a id="logout" onClick={logout}> <span> Welcome in {user.first_name} </span> </a>
     </span>
   )

@@ -10,14 +10,14 @@ import (
 )
 
 func GetProductById(c *gin.Context) {
-	c.JSON(http.StatusOK, "Buscando: "+c.Param("product_id"))
-
 	var productDto dto.ProductDto
-	productDto.Name = "Jose"
-	productDto.ProductId = 1
-	productDto.Picture = "imagen.net"
-	productDto.Price = 300
-	productDto.CurrencyId = "ARS"
+	id, _ := strconv.Atoi(c.Param("product_id"))
+	productDto, err := service.ProductService.GetProductById(id)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
 
 	c.JSON(http.StatusOK, productDto)
 }
