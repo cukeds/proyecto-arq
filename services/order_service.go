@@ -58,7 +58,7 @@ func (s *orderService) InsertOrder(orderInsertDto dto.OrderInsertDto) (dto.Order
 			return orderResponseDto, e.NewConflictApiError("Not enough stock on product: " + product.Name)
 		}
 
-		total += detail.Price
+		total += (detail.Price * float32(detail.Quantity))
 
 	}
 

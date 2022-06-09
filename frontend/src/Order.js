@@ -129,7 +129,7 @@ function Order(){
     <div> Woohoo you placed a freaking order. I'm so proud of you</div>
     {showProducts(orderProducts)}
 
-    <div> Total: {total} </div>
+    <div> Total: ${total} </div>
     </div>
   )
 

@@ -47,6 +47,7 @@ func (s *orderDetailService) InsertDetail(orderDetailDto dto.OrderDetailInsertDt
 	orderDetail.Quantity = orderDetailDto.Quantity
 	orderDetail.CurrencyId = "ARS"
 	orderDetail.Name = orderDetailDto.Name
+	orderDetail.Price = orderDetailDto.Price
 
 	orderDetail = orderDetailClient.InsertOrderDetail(orderDetail)
 
