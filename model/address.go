@@ -1,7 +1,7 @@
 package model
 
 type Address struct {
-	AddressId int    `gorm:"primaryKey"`
+	AddressId int    `gorm:"primaryKey;AUTO_INCREMENT"`
 	UserId    int    `gorm:"type:int"`
 	Street1   string `gorm:"type:varchar(100)"`
 	Street2   string `gorm:"type:varchar(100)"`

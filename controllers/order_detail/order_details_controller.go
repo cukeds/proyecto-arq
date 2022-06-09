@@ -11,20 +11,6 @@ func GetOrderDetailById(c *gin.Context) {
 	log.Debug("Order Detail id: " + c.Param("id"))
 
 	var orderDetailDto dto.OrderDetailDto
-
-	// Dummy product
-	var Product dto.ProductDto
-	Product.Name = "Jose"
-	Product.ProductId = 1
-	Product.Picture = "imagen.net"
-	Product.Price = 300
-	Product.CurrencyId = "ARS"
-
-	orderDetailDto.Product = Product
-	orderDetailDto.Price = orderDetailDto.Product.Price
-	orderDetailDto.CurrencyId = orderDetailDto.Product.CurrencyId
-	orderDetailDto.Quantity = 10
-
 	c.JSON(http.StatusOK, orderDetailDto)
 }
 

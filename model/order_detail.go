@@ -1,7 +1,7 @@
 package model
 
 type OrderDetail struct {
-	OrderDetailId int     `gorm:"primaryKey"`
+	OrderDetailId int     `gorm:"primaryKey;AUTO_INCREMENT"`
 	OrderId       int     `gorm:"type:int"`
 	ProductId     int     `gorm:"type:int"`
 	Quantity      int     `gorm:"type:int;not null;"`

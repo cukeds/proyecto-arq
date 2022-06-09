@@ -1,7 +1,7 @@
 package model
 
 type Product struct {
-	ProductId   int     `gorm:"primaryKey"`
+	ProductId   int     `gorm:"primaryKey;AUTO_INCREMENT"`
 	CategoryId  int     `gorm:"foreignKey:CategoryId"`
 	Name        string  `gorm:"type:varchar(100);not null;unique;"`
 	Description string  `gorm:"type:varchar(255);not null;"`

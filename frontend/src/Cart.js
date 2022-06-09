@@ -24,6 +24,49 @@ async function getProductById(id){
   }).then(response => response.json())
 }
 
+async function postOrder(products) {
+  let details = []
+  products.forEach((item) => {
+    let detail = {
+      product_id: item.product_id,
+      quantity: Number(item.quantity),
+      price: Number(item.base_price),
+      currency_id: "ARS",
+      name: item.name
+    }
+    details.push(detail)
+  });
+
+  return fetch("http://127.0.0.1:8090/order", {
+    method:"POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      currency_id: "ARS",
+      user_id: Number(Cookie.get("user_id")),
+      details: details
+    })
+  }).then(response => response.json())
+}
+
+
+async function postUser(){
+  return fetch("http://127.0.0.1:8090/user", {
+    method:"POST",
+    headers: {
+      "Content-Type" : "application/json"
+    },
+    body: JSON.stringify({
+      first_name: "juan",
+      last_name: "phlip",
+      username: "juanphlip",
+      password: "idk",
+      email: "email@email.email"
+    })
+  }).then(response => response.json())
+}
+
 function goto(path){
   window.location = window.location.origin + path
 }
@@ -90,14 +133,10 @@ async function setCart(setter, setterTotal){
     });
     setterTotal(total)
   })
-
-
 }
 
-
-
-function buy(){
-  goto()
+async function buy(products){
+  await postOrder(products)
 }
 
 function Cart(){
@@ -136,7 +175,7 @@ function Cart(){
 
       <div className="emptySpace">
         <span> Total: ${total} </span>
-        <button onClick={buy}>Order Now</button>
+        <button onClick={() => buy(cartProducts)}>Order Now</button>
       </div>
 
       <div id="main">
