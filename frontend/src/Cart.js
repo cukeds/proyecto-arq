@@ -1,5 +1,4 @@
 import React, { useState, List, Checkbox} from "react";
-import Dropdown from "react-bootstrap/Dropdown"
 import "./css/Cart.css";
 import logo from "./images/logo.svg"
 import cart from "./images/cart.svg"
