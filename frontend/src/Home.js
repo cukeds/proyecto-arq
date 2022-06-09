@@ -115,7 +115,7 @@ function showProducts(products, setCartItems){
 
    <div obj={product} key={product.product_id} className="product">
     <div>
-      <img width="128px" height="128px" src={"./images/" + product.picture_url}/>
+      <img width="128px" height="128px" src={"./images/" + product.picture_url}  onError={(e) => (e.target.onerror = null, e.target.src = "./images/default.jpg")}/>
     </div>
     <a className="name">{product.name}</a>
     <a className="addcart" onClick={() => addToCart(product.product_id, setCartItems)}>Add to Cart</a>

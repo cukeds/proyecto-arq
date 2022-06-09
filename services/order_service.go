@@ -2,6 +2,7 @@ package services
 
 import (
 	orderClient "mvc-go/clients/order"
+	productClient "mvc-go/clients/product"
 	"mvc-go/dto"
 	"mvc-go/model"
 	e "mvc-go/utils/errors"
@@ -44,18 +45,27 @@ func (s *orderService) InsertOrder(orderInsertDto dto.OrderInsertDto) (dto.Order
 
 	var order model.Order
 	var total float32
+	var orderResponseDto dto.OrderResponseDto
 	total = 0
 	order.UserId = orderInsertDto.UserId
 	order.Date = time.Now().Format("2006.01.02 15:04:05")
 	for i := 0; i < len(orderInsertDto.OrderDetails); i++ {
-		total += orderInsertDto.OrderDetails[i].Price
+		var product model.Product
+		detail := orderInsertDto.OrderDetails[i]
+		product = productClient.GetProductById(detail.ProductId)
+		if product.Stock < detail.Quantity {
+			orderResponseDto.OrderId = -1
+			return orderResponseDto, e.NewConflictApiError("Not enough stock on product: " + product.Name)
+		}
+
+		total += detail.Price
+
 	}
 	order.Total = total
 	order.CurrencyId = "ARS"
 
 	order = orderClient.InsertOrder(order)
 
-	var orderResponseDto dto.OrderResponseDto
 	orderResponseDto.OrderId = order.OrderId
 
 	log.Debug(order)

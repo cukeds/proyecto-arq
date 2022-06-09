@@ -33,7 +33,7 @@ func OrderInsert(c *gin.Context) {
 	orderResponseDto, er := service.OrderService.InsertOrder(orderInsertDto)
 	if er != nil {
 		log.Error(er.Error())
-		c.JSON(http.StatusBadRequest, er.Error())
+		c.JSON(er.Status(), er.Error())
 		return
 	}
 	for i := 0; i < len(orderInsertDto.OrderDetails); i++ {
