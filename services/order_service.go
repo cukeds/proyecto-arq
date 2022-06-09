@@ -61,6 +61,12 @@ func (s *orderService) InsertOrder(orderInsertDto dto.OrderInsertDto) (dto.Order
 		total += detail.Price
 
 	}
+
+	for i := 0; i < len(orderInsertDto.OrderDetails); i++ {
+		detail := orderInsertDto.OrderDetails[i]
+		productClient.RemoveStock(detail.ProductId, detail.Quantity)
+	}
+
 	order.Total = total
 	order.CurrencyId = "ARS"
 
