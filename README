@@ -2,16 +2,17 @@ TODO ON WEBSITE:
 
 
 High priority:
+	- Implement Order Functionality beyond placing it
+					(check for stock, delete the cart, take you to confirm page)
 
-	- Add Shopping Cart functionality and Page
-
-	- Be able to place orders 
+	- USER PAGE (SHOW THE USER INFO)
+	- ADDRESSES FUNCTIONALITY 
+	- Delete items from cart
 
 Med priority:
 
 	- Product by id page
 	- Add items to cart from their product
-	- Filter products by category
 
 Low Priority:
 
