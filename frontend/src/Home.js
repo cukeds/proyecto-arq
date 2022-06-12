@@ -199,7 +199,7 @@ function Home() {
 
     <span>
     <img src={usersvg} onClick={()=>goto("/user")} id="user" width="48px" height="48px"/>
-    <img src={cart} onClick={()=>goto("/cart")} id="cart" width="48px" height="48px"/>
+    <img src={cart} onClick={()=>goto("/cart ")} id="cart" width="48px" height="48px"/>
     <span className="cartNumber">{cartItems > 0 ? cartItems : 0}</span>
     <a id="logout" onClick={logout}> <span> Welcome in {user.first_name} </span> </a>
     </span>

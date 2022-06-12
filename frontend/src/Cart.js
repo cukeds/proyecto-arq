@@ -121,33 +121,35 @@ function remove(n, p_id){
 function showProducts(products){
   return products.map((product) =>
 
-
    <div>
-   <div obj={product} key={product.product_id} className="product">
-    <div>
-      <img width="128px" height="128px" src={"./images/" + product.picture_url}  onError={(e) => (e.target.onerror = null, e.target.src = "./images/default.jpg")}/>
-    </div>
-    <a className="name">{product.name}</a>
-    <a className="price">{product.currency_id + "$" + product.base_price}</a>
-    <div>
-      <a className="description">{product.description}</a>
-    </div>
-    <div className="right">
-      <a className="category">{product.category.name}</a>
-      <a className="stock">Stock: {product.stock}</a>
-    </div>
+     <div obj={product} key={product.product_id} className="product">
+      <div>
+        <img width="128px" height="128px" src={"./images/" + product.picture_url}  onError={(e) => (e.target.onerror = null, e.target.src = "./images/default.jpg")}/>
+      </div>
+      <a className="name">{product.name}</a>
+      <a className="price">{product.currency_id + "$" + product.base_price}</a>
+      <div>
+        <a className="description">{product.description}</a>
+      </div>
+      <div className="right">
+        <a className="category">{product.category.name}</a>
+        <a className="stock">Stock: {product.stock}</a>
+      </div>
+
+     </div>
+     <div className="quantity">
+       <h3 className="Remove"> Remove items </h3>
+       <select id={"removeSelect" + product.product_id}>
+        {getOptions(product.quantity)}
+       </select>
+       <button className="remove" onClick={() => remove(document.getElementById("removeSelect" + product.product_id).value, product.product_id)}>x</button>
+       <h1 className="amount"> Amount: </h1>
+       <h1 className="number"> {product.quantity} </h1>
+       <h1 className="subtotal"> Subtotal: ${product.quantity * product.base_price} </h1>
+      </div>
    </div>
-   <div className="quantity">
-     <h3 className="Remove"> Remove items </h3>
-     <select id={"removeSelect" + product.product_id}>
-      {getOptions(product.quantity)}
-     </select>
-     <button className="remove" onClick={() => remove(document.getElementById("removeSelect" + product.product_id).value, product.product_id)}>x</button>
-     <h1 className="amount"> Amount: </h1>
-     <h1 className="number"> {product.quantity} </h1>
-     <h1 className="subtotal"> Subtotal: ${product.quantity * product.base_price} </h1>
-  </div>
-   </div>
+
+
  )
 
 }

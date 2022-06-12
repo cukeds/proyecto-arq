@@ -112,7 +112,11 @@ function User() {
     }
 
     if(Cookie.get("orders") == undefined){
-      getOrdersByUserId(Cookie.get("user_id")).then(response => setOrders(response))
+      getOrdersByUserId(Cookie.get("user_id")).then(response => {
+        if (response != undefined){
+          setOrders(response)
+        }
+      })
     }
   }
 
@@ -137,7 +141,7 @@ function User() {
       <div> Username: {user.username} </div>
       <div> Email: {user.email} </div>
       <div> Addresses: {user.addresses} </div>
-      <div> Orders: {orders.length > 0 ? showUserOrders(orders) : <a/>}</div>
+      <div> Orders: {orders.length > 0 ? showUserOrders(orders) : <a> No orders :( </a>}</div>
     </div>
   )
 
