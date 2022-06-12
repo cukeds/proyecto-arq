@@ -31,6 +31,18 @@
   float: left;
 }
 
+.topnav p{
+  float: left;
+  vertical-align: middle;
+  font-size: 22px;
+  color: white;
+}
+
+#loading {
+  display: block;
+  margin-left: 33%;
+}
+
 .emptySpace {
   display: block;
   height: 80px;

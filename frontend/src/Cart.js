@@ -1,7 +1,7 @@
 import React, { useState, List, Checkbox} from "react";
 import "./css/Cart.css";
 import logo from "./images/logo.svg"
-import cart from "./images/cart.svg"
+import usersvg from "./images/user.svg"
 import Cookies from "universal-cookie";
 
 const Cookie = new Cookies();
@@ -192,6 +192,7 @@ function Cart(){
   const login = (
 
     <span>
+    <img src={usersvg} onClick={()=>goto("/user")} id="user" width="48px" height="48px"/>
     <a id="logout" onClick={logout}> <span> Welcome in {user.first_name} </span> </a>
     </span>
   )
@@ -215,7 +216,9 @@ function Cart(){
   return (
     <div className="cart">
       <div className="topnav">
-        <img src={logo} width="80px" height="80px" id="logo" onClick={()=>goto("/")} />
+      <div>
+        <img src={logo} width="80px" height="80px" id="logo" onClick={()=>goto("/")} /> <p>3 Random Words Shop</p>
+      </div>
         {isLogged ? login : <a id="login" onClick={() => goto("/login")}>Login</a>}
       </div>
 

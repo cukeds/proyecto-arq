@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "./css/Home.css";
 import logo from "./images/logo.svg"
 import cart from "./images/cart.svg"
+import loadinggif from "./images/loading.gif"
+import usersvg from "./images/user.svg"
 import Cookies from "universal-cookie";
 
 const Cookie = new Cookies();
@@ -162,10 +164,6 @@ function deleteCategory(){
   goto("/")
 }
 
-function gotocart(){
-  goto("/cart")
-}
-
 
 function Home() {
   const [isLogged, setIsLogged] = useState(false)
@@ -200,16 +198,23 @@ function Home() {
   const login = (
 
     <span>
-    <img src={cart} onClick={gotocart} id="cart" width="48px" height="48px"/>
+    <img src={usersvg} onClick={()=>goto("/user")} id="user" width="48px" height="48px"/>
+    <img src={cart} onClick={()=>goto("/cart")} id="cart" width="48px" height="48px"/>
     <span className="cartNumber">{cartItems > 0 ? cartItems : 0}</span>
     <a id="logout" onClick={logout}> <span> Welcome in {user.first_name} </span> </a>
     </span>
   )
 
+  const loading = (
+    <img id="loading" src={loadinggif}/>
+  )
+
   return (
     <div className="home">
       <div className="topnav">
-        <img src={logo} width="80px" height="80px" />
+        <div>
+          <img src={logo} width="80px" height="80px" id="logo" onClick={()=>goto("/")} /> <p>3 Random Words Shop</p>
+        </div>
         <input type="text" id="search" placeholder="Search..." onChange={search}/>
         {isLogged ? login : <a id="login" onClick={gotologin}>Login</a>}
       </div>
@@ -222,7 +227,7 @@ function Home() {
 
       <div id="main">
         {Cookie.get("category") > 0 ? <a className="categoryFilter"> {category.name} <button className="delete" onClick={deleteCategory}>X</button> </a> : <a/>}
-        {products.length > 0 ? showProducts(products, setCartItems) : <a> Nothing to show :( </a>}
+        {products.length > 0 ? showProducts(products, setCartItems) : loading}
 
 
       </div>
