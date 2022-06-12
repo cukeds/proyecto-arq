@@ -17,14 +17,14 @@ func GetOrderById(id int) model.Order {
 	return order
 }
 
-// func GetOrders() model.Orders {
-// 	var orders model.Orders
-// 	Db.Find(&orders)
-//
-// 	log.Debug("Orders: ", orders)
-//
-// 	return orders
-// }
+func GetOrdersByUserId(id int) model.Orders {
+	var orders model.Orders
+	Db.Where("user_id = ?", id).Find(&orders)
+
+	log.Debug("Orders: ", orders)
+
+	return orders
+}
 
 func InsertOrder(order model.Order) model.Order {
 	result := Db.Create(&order)

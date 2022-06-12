@@ -255,3 +255,82 @@
   transition: .2s;
   filter: invert(76%) sepia(56%) saturate(2133%) hue-rotate(226deg) brightness(105%) contrast(101%);
 }
+
+.order{
+  border: 2px solid black;
+  border-radius: 20px;
+  max-width: 600px;
+  cursor: pointer;
+  background: #f7fea6;
+  margin-bottom: 5px;
+  font-size: 22px;
+}
+
+.order:hover {
+  transition: 0.1s;
+  background: #ff9677;
+}
+
+.order .ordern {
+  font-weight: bold;
+  padding: 2px 6px;
+  border-right: 3px solid black;
+}
+
+.order .date {
+  padding: 2px 6px;
+  border-right: 3px solid black;
+}
+
+.order .total {
+  padding-left: 20px;
+  text-align: left;
+  font-weight: 700;
+}
+
+.order .total span{
+  font-weight: 700;
+}
+
+.order .details {
+  font-size: 16px;
+  border-top: 2px dotted black;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding: 2px 0px;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.order .details .id {
+  font-weight: bold;
+  border-right: 3px dotted black;
+  padding-right: 6px;
+
+}
+
+.order .details .name {
+  padding-left: 6px;
+  padding-right: 6px;
+  font-weight: 500;
+  border-right: 3px dotted black;
+}
+
+.order .details .quantity {
+  font-size: 17px;
+  padding-left: 6px;
+  padding-right: 6px;
+  border-right: 3px dotted black;
+}
+
+.order .details .price {
+  width: 200px;
+  font-weight: 500;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.order .details .detail {
+  padding: 2px;
+
+}

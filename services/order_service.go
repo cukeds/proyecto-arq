@@ -15,6 +15,7 @@ type orderService struct{}
 
 type orderServiceInterface interface {
 	InsertOrder(orderDto dto.OrderInsertDto) (dto.OrderResponseDto, e.ApiError)
+	GetOrdersByUserId(id int) (dto.OrdersDto, e.ApiError)
 }
 
 var (
@@ -25,21 +26,22 @@ func init() {
 	OrderService = &orderService{}
 }
 
-//
-// func (s *orderService) GetOrderById(id int) (dto.OrderDto, e.ApiError) {
-//
-// 	var order model.Order = orderClient.GetOrderById(id)
-// 	var orderDto dto.OrderDto
-//
-// 	if order.OrderId < 0 {
-// 		return orderDto, e.NewBadRequestApiError("order not found")
-// 	}
-// 	orderDto.FirstName = order.FirstName
-// 	orderDto.LastName = order.LastName
-// 	orderDto.Ordername = order.Ordername
-// 	orderDto.OrderId = order.OrderId
-// 	return orderDto, nil
-// }
+func (s *orderService) GetOrdersByUserId(id int) (dto.OrdersDto, e.ApiError) {
+
+	var orders model.Orders = orderClient.GetOrdersByUserId(id)
+	var ordersDto dto.OrdersDto
+
+	for _, order := range orders {
+		var orderDto dto.OrderDto
+		orderDto.OrderId = order.OrderId
+		orderDto.Date = order.Date
+		orderDto.Total = order.Total
+		orderDto.CurrencyId = order.CurrencyId
+		orderDto.OrderDetails, _ = OrderDetailService.GetOrderDetailsByOrderId(order.OrderId)
+		ordersDto = append(ordersDto, orderDto)
+	}
+	return ordersDto, nil
+}
 
 func (s *orderService) InsertOrder(orderInsertDto dto.OrderInsertDto) (dto.OrderResponseDto, e.ApiError) {
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./css/Home.css";
+import "./css/User.css";
 import logo from "./images/logo.svg"
 import cart from "./images/cart.svg"
 import loadinggif from "./images/loading.gif"
@@ -18,6 +18,16 @@ async function getUserById(id){
 
 }
 
+async function getOrdersByUserId(id){
+    return await fetch('http://127.0.0.1:8090/orders/' + id, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+}).then(response => response.json())
+
+}
+
 function goto(path){
   window.location = window.location.origin + path
 }
@@ -28,24 +38,86 @@ function logout(){
   document.location.reload()
 }
 
+function showDetails(id){
+  let div = document.getElementsByClassName("o" + id)
+  for(let detail of div){
+    let show = false;
+    detail.classList.value.split(" ").forEach(c=>{
+      if (c == "hidden"){
+        show = true;
+      }
+    })
+    if(show){
+      detail.classList.remove("hidden")
+    }else{
+      detail.classList.add("hidden")
+    }
+  }
+
+
+}
+
+function getDetails(details){
+  return details.map((detail) =>
+      <tbody>
+        <tr className="detail">
+          <td className="id">{detail.product_id}</td>
+          <td className="name">{detail.name}</td>
+          <td className="quantity">{detail.quantity}</td>
+          <td className="price">{detail.currency_id + "$" + detail.price}</td>
+        </tr>
+      </tbody>
+  )
+}
+
+function showUserOrders(orders){
+  return orders.map((order) =>
+
+  <div obj={order} key={order.order_id} className="order" onClick={()=>showDetails(order.order_id)}>
+    <a className="ordern">Order N°: {order.order_id}</a>
+    <a className="date">Date: {order.date.split("T")[0]}</a>
+    <a className="total">Total: <span>{order.currency_id + "$" + order.total} </span></a>
+
+    <div className={"details" + " o" + order.order_id + " hidden"}>
+      <table>
+        <thead>
+          <tr className="detail thead">
+            <td className="id">ID</td>
+            <td className="name">NAME</td>
+            <td className="quantity">n</td>
+            <td className="price">PRICE</td>
+          </tr>
+        </thead>
+
+      {getDetails(order.details)}
+      </table>
+    </div>
+
+  </div>
+ )
+}
 
 function User() {
   const [isLogged, setIsLogged] = useState(false)
   const [user, setUser] = useState({})
   const [cartItems, setCartItems] = useState("")
+  const [orders, setOrders] = useState([])
 
 
   if (Cookie.get("user_id") > -1 && !isLogged){
     getUserById(Cookie.get("user_id")).then(response => setUser(response))
     setIsLogged(true)
+    if (!cartItems && Cookie.get("cartItems")){
+      setCartItems(Cookie.get("cartItems"))
+    }
+
+    if(Cookie.get("orders") == undefined){
+      getOrdersByUserId(Cookie.get("user_id")).then(response => setOrders(response))
+    }
   }
 
   if (!(Cookie.get("user_id") > -1) && isLogged){
     setIsLogged(false)
-  }
-
-  if (!cartItems && Cookie.get("cartItems")){
-    setCartItems(Cookie.get("cartItems"))
   }
 
   const login = (
@@ -65,7 +137,7 @@ function User() {
       <div> Username: {user.username} </div>
       <div> Email: {user.email} </div>
       <div> Addresses: {user.addresses} </div>
-      <div> Orders: </div>
+      <div> Orders: {orders.length > 0 ? showUserOrders(orders) : <a/>}</div>
     </div>
   )
 

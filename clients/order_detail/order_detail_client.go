@@ -17,14 +17,14 @@ func GetOrderDetailById(id int) model.OrderDetail {
 	return orderDetail
 }
 
-// func GetOrderDetails() model.OrderDetails {
-// 	var orderDetails model.OrderDetails
-// 	Db.Find(&orderDetails)
-//
-// 	log.Debug("OrderDetails: ", orderDetails)
-//
-// 	return orderDetails
-// }
+func GetOrderDetailsByOrderId(id int) model.OrderDetails {
+	var orderDetails model.OrderDetails
+	Db.Where("order_id = ?", id).Find(&orderDetails)
+
+	log.Debug("OrderDetails: ", orderDetails)
+
+	return orderDetails
+}
 
 func InsertOrderDetail(orderDetail model.OrderDetail) model.OrderDetail {
 	result := Db.Create(&orderDetail)

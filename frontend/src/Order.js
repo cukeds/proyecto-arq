@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./css/Order.css";
 import logo from "./images/logo.svg"
 import cart from "./images/cart.svg"
+import usersvg from "./images/user.svg"
 import Cookies from "universal-cookie";
 
 const Cookie = new Cookies();
@@ -110,6 +111,8 @@ function Order(){
   const login = (
 
     <span>
+    <img src={usersvg} onClick={()=>goto("/user")} id="user" width="48px" height="48px"/>
+    <img src={cart} onClick={()=>goto("/cart")} id="cart" width="48px" height="48px"/>
     <a id="logout" onClick={logout}> <span> Welcome in {user.first_name} </span> </a>
     </span>
   )
