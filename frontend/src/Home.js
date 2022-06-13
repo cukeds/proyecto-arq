@@ -58,12 +58,6 @@ function goto(path){
   window.location = window.location.origin + path
 }
 
-
-function gotologin(){
-  goto("/login")
-}
-
-
 function retry() {
   goto("/")
 }
@@ -188,7 +182,7 @@ function Home() {
   }
 
   if (products.length <= 0){
-    getProducts().then(response => {setProducts(response)})
+    getProducts().then(response => setProducts(response))
   }
 
   if (!cartItems && Cookie.get("cartItems")){
@@ -216,7 +210,7 @@ function Home() {
           <img src={logo} width="80px" height="80px" id="logo" onClick={()=>goto("/")} /> <p>3 Random Words Shop</p>
         </div>
         <input type="text" id="search" placeholder="Search..." onChange={search}/>
-        {isLogged ? login : <a id="login" onClick={gotologin}>Login</a>}
+        {isLogged ? login : <a id="login" onClick={()=>goto("/login")}>Login</a>}
       </div>
 
 

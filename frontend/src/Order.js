@@ -147,7 +147,7 @@ function Order(){
   )
 
   return (
-    <div className="order">
+    <div className="orderstatus">
       <div className="topnav">
         <img src={logo} width="80px" height="80px" id="logo" onClick={()=>goto("/")} />
         {isLogged ? login : <a id="login" onClick={() => goto("/login")}>Login</a>}
