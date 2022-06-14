@@ -273,7 +273,6 @@ function Checkout(){
 
       <div id="main">
         {Cookie.get("cart") && Cookie.get("user_id") > -1 ? renderOrderButton : <span/>}
-        {Cookie.get("cart") ? (Cookie.get("user_id") > -1 ? showProducts(cartProducts) : renderEmptyCart) : <a> Nothing to show :( </a>}
         <div className="address">
           <a className="addressTitle">Shipping Address</a>
           <a className="street">Street<input style={addressErrors.street ? {background: "red"} : {background: "white"}} id="street"/></a>
@@ -284,6 +283,8 @@ function Checkout(){
           <a className="country">Country<input style={addressErrors.country ? {background: "red"} : {}} id="country"/></a>
           <input type="submit" onClick={()=>getAddress()}/>
         </div>
+        {Cookie.get("cart") ? (Cookie.get("user_id") > -1 ? showProducts(cartProducts) : renderEmptyCart) : <a> Nothing to show :( </a>}
+
       </div>
     </div>
   );
