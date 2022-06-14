@@ -132,6 +132,9 @@ function logout(){
   document.location.reload()
 }
 
+
+
+
 function search(){
   let input, filter, a, i;
   input = document.getElementById("search");

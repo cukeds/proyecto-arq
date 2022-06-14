@@ -1,7 +1,7 @@
 package model
 
 type Order struct {
-	OrderId    int     `gorm:"primaryKey;AUTO_INCREMENT"`
+	ID         int     `gorm:"primaryKey;AUTO_INCREMENT"`
 	UserId     int     `gorm:"type:int;not null"`
 	Date       string  `gorm:"type:date;not null;"`
 	Total      float32 `gorm:"type:decimal;not null;"`

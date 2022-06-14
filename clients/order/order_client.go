@@ -11,7 +11,7 @@ var Db *gorm.DB
 
 func GetOrderById(id int) model.Order {
 	var order model.Order
-	Db.Where("order_id = ?", id).First(&order)
+	Db.Where("id = ?", id).First(&order)
 	log.Debug("Order: ", order)
 
 	return order
@@ -27,12 +27,15 @@ func GetOrdersByUserId(id int) model.Orders {
 }
 
 func InsertOrder(order model.Order) model.Order {
+
 	result := Db.Create(&order)
 
 	if result.Error != nil {
-		//TODO Manage Errors
+
 		log.Debug(result.Error, order)
+		order.ID = 0
+		return order
 	}
-	log.Debug("Order Created: ", order.OrderId)
+	log.Debug("Order Created: ", order.ID)
 	return order
 }

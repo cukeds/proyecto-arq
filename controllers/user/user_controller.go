@@ -61,13 +61,23 @@ func UserInsert(c *gin.Context) {
 
 func Login(c *gin.Context) {
 	var loginDto dto.LoginDto
-	c.BindJSON(&loginDto)
+	er := c.BindJSON(&loginDto)
+
+	if er != nil {
+		log.Error(er.Error())
+		c.JSON(http.StatusBadRequest, er.Error())
+		return
+	}
 	log.Debug(loginDto)
 
 	var loginResponseDto dto.LoginResponseDto
 	loginResponseDto, err := service.UserService.Login(loginDto)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
+		if err.Status() == 400 {
+			c.JSON(http.StatusBadRequest, err.Error())
+			return
+		}
+		c.JSON(http.StatusForbidden, err.Error())
 		return
 	}
 

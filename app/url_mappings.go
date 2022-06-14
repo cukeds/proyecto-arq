@@ -43,11 +43,7 @@ func mapUrls() {
 
 	// Cart Mapping
 	router.GET("/cart/:id", cartController.GetCartById)
-	// maybe: router.GET("/cart, cartController.GetCarts")
 	router.POST("/cart", cartController.InsertCart)
-
-	// Cart Details Mapping
-	// TODO
 
 	// Login Mapping
 	router.POST("/login", userController.Login)

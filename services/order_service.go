@@ -33,11 +33,11 @@ func (s *orderService) GetOrdersByUserId(id int) (dto.OrdersDto, e.ApiError) {
 
 	for _, order := range orders {
 		var orderDto dto.OrderDto
-		orderDto.OrderId = order.OrderId
+		orderDto.OrderId = order.ID
 		orderDto.Date = order.Date
 		orderDto.Total = order.Total
 		orderDto.CurrencyId = order.CurrencyId
-		orderDto.OrderDetails, _ = OrderDetailService.GetOrderDetailsByOrderId(order.OrderId)
+		orderDto.OrderDetails, _ = OrderDetailService.GetOrderDetailsByOrderId(order.ID)
 		ordersDto = append(ordersDto, orderDto)
 	}
 	return ordersDto, nil
@@ -56,7 +56,7 @@ func (s *orderService) InsertOrder(orderInsertDto dto.OrderInsertDto) (dto.Order
 		detail := orderInsertDto.OrderDetails[i]
 		product = productClient.GetProductById(detail.ProductId)
 		if product.Stock < detail.Quantity {
-			orderResponseDto.OrderId = -1
+			orderResponseDto.OrderId = 0
 			return orderResponseDto, e.NewConflictApiError("Not enough stock on product: " + product.Name)
 		}
 
@@ -74,7 +74,7 @@ func (s *orderService) InsertOrder(orderInsertDto dto.OrderInsertDto) (dto.Order
 
 	order = orderClient.InsertOrder(order)
 
-	orderResponseDto.OrderId = order.OrderId
+	orderResponseDto.OrderId = order.ID
 
 	log.Debug(order)
 	return orderResponseDto, nil
