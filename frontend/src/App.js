@@ -6,6 +6,7 @@ import Login from "./Login"
 import Cart from "./Cart"
 import Order from "./Order"
 import User from "./User"
+import Checkout from "./Checkout"
 
 function App(){
 return (
@@ -17,6 +18,7 @@ return (
         <Route path= "/order/complete" element={<Order/>}/>
         <Route path= "/order/error" element={<Order/>}/>
         <Route path= "/user" element={<User/>}/>
+        <Route path= "/checkout" element={<Checkout/>}/>
       </Routes>
     </Router>
   );

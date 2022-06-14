@@ -1,5 +1,5 @@
 import React, { useState, List, Checkbox} from "react";
-import "./css/Cart.css";
+import "./css/Checkout.css";
 import logo from "./images/logo.svg"
 import usersvg from "./images/user.svg"
 import Cookies from "universal-cookie";
@@ -22,6 +22,33 @@ async function getProductById(id){
       "Content-Type": "application/json"
     }
   }).then(response => response.json())
+}
+
+async function postOrder(products, address) {
+  let details = []
+  products.forEach((item) => {
+    let detail = {
+      product_id: item.product_id,
+      quantity: Number(item.quantity),
+      price: Number(item.base_price),
+      currency_id: "ARS",
+      name: item.name
+    }
+    details.push(detail)
+  });
+
+  return fetch("http://127.0.0.1:8090/order", {
+    method:"POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      currency_id: "ARS",
+      user_id: Number(Cookie.get("user_id")),
+      details: details,
+      address: address
+    })
+  })
 }
 
 function goto(path){
@@ -122,7 +149,10 @@ function showProducts(products){
        <h1 className="subtotal"> Subtotal: ${product.quantity * product.base_price} </h1>
       </div>
    </div>
+
+
  )
+
 }
 
 async function setCart(setter, setterTotal){
@@ -136,12 +166,71 @@ async function setCart(setter, setterTotal){
   })
 }
 
-function Cart(){
+async function buy(products, address){
+  if(address.bought != undefined){
+  await postOrder(products, address).then(response => {
+    if(response.status == 409){
+      response.json().then(response => Cookie.set("orderError", response, {path: "/order"}))
+      goto("/order/error")
+    }
+    if(response.status == 201){
+      Cookie.set("order", Cookie.get("cart"), {path: "/order"})
+      Cookie.set("cart", "", {path: "/"})
+      Cookie.set("cartItems", "", {path: "/"})
+      goto("/order/complete")
+    }
+  })
+}else{
+  alert("Please fill in the missing address information and submit your address")
+}
+}
+
+function Checkout(){
   const [user, setUser] = useState({});
   const [isLogged, setIsLogged] = useState(false);
   const [cartProducts, setCartProducts] = useState([]);
   const [total, setTotal] = useState(0);
+  const [address, setAddress] = useState({});
+  const [addressErrors, setAddressErrors] = useState({});
 
+  function getAddress(){
+    let errors = {}
+    let stop = false;
+    if(document.getElementById("street").value == ""){
+      errors.street = true;
+    }
+    if(document.getElementById("number").value == ""){
+      errors.number = true;
+    }
+    if(document.getElementById("district").value == ""){
+      errors.district = true;
+    }
+    if(document.getElementById("city").value == ""){
+      errors.city = true;
+    }
+    if(document.getElementById("country").value == ""){
+      errors.country = true;
+    }
+    Object.keys(errors).forEach((key) => {
+      if(errors[key]){
+        setAddressErrors(errors)
+        stop = true;
+      }
+    });
+    if(stop){
+      return
+    }
+    setAddress({
+      street: document.getElementById("street").value,
+      street2: document.getElementById("street2").value,
+      number: document.getElementById("number").value,
+      district: document.getElementById("district").value,
+      city: document.getElementById("city").value,
+      country: document.getElementById("country").value,
+      bought: true
+    })
+    setAddressErrors({})
+  }
 
   if (cartProducts.length <= 0 && Cookie.get("user_id") > -1){
     setCart(setCartProducts, setTotal)
@@ -167,7 +256,7 @@ function Cart(){
   const renderOrderButton = (
     <div className="emptySpace">
       <span> Total: ${total} </span>
-      <button onClick={() => goto("/checkout")}>Checkout!</button>
+      <button onClick={() => buy(cartProducts, address)}>Pay and Order</button>
     </div>
   )
 
@@ -185,11 +274,19 @@ function Cart(){
       <div id="main">
         {Cookie.get("cart") && Cookie.get("user_id") > -1 ? renderOrderButton : <span/>}
         {Cookie.get("cart") ? (Cookie.get("user_id") > -1 ? showProducts(cartProducts) : renderEmptyCart) : <a> Nothing to show :( </a>}
-
-
+        <div className="address">
+          <a className="addressTitle">Shipping Address</a>
+          <a className="street">Street<input style={addressErrors.street ? {background: "red"} : {background: "white"}} id="street"/></a>
+          <a className="street2">Street 2<input style={addressErrors.street2 ? {background: "red"} : {}} id="street2"/></a>
+          <a className="number">Number<input style={addressErrors.number ? {background: "red"} : {}} id="number"/></a>
+          <a className="district">District<input style={addressErrors.district ? {background: "red"} : {}} id="district"/></a>
+          <a className="city">City<input style={addressErrors.city ? {background: "red"} : {}} id="city"/></a>
+          <a className="country">Country<input style={addressErrors.country ? {background: "red"} : {}} id="country"/></a>
+          <input type="submit" onClick={()=>getAddress()}/>
+        </div>
       </div>
     </div>
   );
 }
 
-export default Cart;
+export default Checkout;
