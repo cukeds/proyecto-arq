@@ -110,7 +110,7 @@ function showProducts(products, setCartItems){
   return products.map((product) =>
 
    <div obj={product} key={product.product_id} className="product">
-    <div>
+    <div onClick={()=>goto("/product?id="+product.product_id)}>
       <img width="128px" height="128px" src={"./images/" + product.picture_url}  onError={(e) => (e.target.onerror = null, e.target.src = "./images/default.jpg")}/>
     </div>
     <a className="name">{product.name}</a>
@@ -208,7 +208,7 @@ function Home() {
 
   return (
     <div className="home">
-      <div className="topnav">
+      <div className="topnavHOME">
         <div>
           <img src={logo} width="80px" height="80px" id="logo" onClick={()=>goto("/")} /> <p>3 Random Words Shop</p>
         </div>

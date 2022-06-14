@@ -151,3 +151,10 @@
 #logo {
   cursor: pointer;
 }
+
+
+img:hover {
+  transition: .1s;
+  opacity: 70%;
+
+}
