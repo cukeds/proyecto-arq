@@ -7,21 +7,24 @@
 	cart from scratch, building both the backend and frontend.
 
 	Languages used:
-	  	BACKEND:
-				GoLang
-					gin-gonic
-					gorm
+	  	- BACKEND:
+				- GoLang
+					- gin-gonic
+					- gorm
 
-			FRONTEND:
-				JS:
-					React
-				HTML & CSS
+---
 
-			DB:
-				MySQL
-
+			- FRONTEND:
+				- JS:
+					- React
+				- HTML & CSS
+---
+			- DB:
+				- MySQL
+---
 	The code is structured following the MVC pattern (Model View Controller)
-	
+	The code is made so if you have docker you can just run a Docker Compose and
+	everything will work
 
 # TODO ON WEBSITE:
 
