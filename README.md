@@ -5,20 +5,18 @@
 
 	The purpose of the project is to build an almost fully functional shopping
 	cart from scratch, building both the backend and frontend.
-
+---
 	Languages used:
 	  	- BACKEND:
 			- GoLang
 			  - gin-gonic
 			  - gorm
 
----
-
 		- FRONTEND:
 			- JS:
 			  - React
 			- HTML & CSS
----
+			
 		- DB:
 			- MySQL
 ---
