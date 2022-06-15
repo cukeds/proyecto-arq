@@ -8,19 +8,19 @@
 
 	Languages used:
 	  	- BACKEND:
-				- GoLang
-					- gin-gonic
-					- gorm
+			- GoLang
+			  - gin-gonic
+			  - gorm
 
 ---
 
-			- FRONTEND:
-				- JS:
-					- React
-				- HTML & CSS
+		- FRONTEND:
+			- JS:
+			  - React
+			- HTML & CSS
 ---
-			- DB:
-				- MySQL
+		- DB:
+			- MySQL
 ---
 	The code is structured following the MVC pattern (Model View Controller)
 	The code is made so if you have docker you can just run a Docker Compose and
