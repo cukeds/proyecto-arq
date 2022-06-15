@@ -4,16 +4,16 @@
 ## High priority:
 
 	- ADDRESSES FUNCTIONALITY
+	- Tests
 
 ## Medium priority:
-
-	- Product by id page
-	- Add items to cart from their product
+	- Handle errors
+	- Password encryption
 
 ## Low Priority:
 
 	- Make things look better
-	- Handle errors
+
 
 
 # HOW TO RUN
