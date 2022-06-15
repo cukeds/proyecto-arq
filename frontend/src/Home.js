@@ -9,7 +9,7 @@ import Cookies from "universal-cookie";
 const Cookie = new Cookies();
 
 async function getUserById(id){
-    return await fetch('http://127.0.0.1:8090/user/' + id, {
+    return await fetch('http://localhost:8090/user/' + id, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -19,7 +19,7 @@ async function getUserById(id){
 }
 
 async function getCategories(){
-  return await fetch('http://127.0.0.1:8090/categories', {
+  return await fetch('http://localhost:8090/categories', {
     method: "GET",
     headers: {
       "Content-Type": "application/json"
@@ -28,7 +28,7 @@ async function getCategories(){
 }
 
 async function getProducts(){
-  return await fetch('http://127.0.0.1:8090/products', {
+  return await fetch('http://localhost:8090/products', {
     method: "GET",
     headers: {
       "Content-Type": "application/json"
@@ -37,7 +37,7 @@ async function getProducts(){
 }
 
 async function getProductsByCategoryId(id){
-  return await fetch('http://127.0.0.1:8090/products/' + id, {
+  return await fetch('http://localhost:8090/products/' + id, {
     method: "GET",
     headers: {
       "Content-Type": "application/json"
@@ -46,7 +46,7 @@ async function getProductsByCategoryId(id){
 }
 
 async function getCategoryById(id){
-  return await fetch('http://127.0.0.1:8090/category/' + id, {
+  return await fetch('http://localhost:8090/category/' + id, {
     method: "GET",
     headers: {
       "Content-Type": "application/json"

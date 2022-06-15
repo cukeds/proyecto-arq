@@ -16,8 +16,10 @@ Low Priority:
 	- Handle errors
 
 
--- START PROJECT (As of 12/06/2022)
-	- Open XAMPP server with MySql
-	- Import cart_database.sql on a database of name "cart"
-	- on the main folder: go run main.go
-	- on /frontend: npm start (install dependencies)
+# HOW TO RUN
+	## REQUIRES: Docker
+	- docker compose up -d
+	- open localhost:3000
+	- hope for the best
+
+	### TO END DO docker compose down

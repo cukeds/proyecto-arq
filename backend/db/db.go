@@ -2,7 +2,6 @@ package db
 
 import (
 	addressClient "mvc-go/clients/address"
-	cartClient "mvc-go/clients/cart"
 	categoryClient "mvc-go/clients/category"
 	orderClient "mvc-go/clients/order"
 	orderDetailClient "mvc-go/clients/order_detail"
@@ -25,7 +24,7 @@ func init() {
 	DBName := "cart"
 	DBUser := "root"
 	DBPass := ""
-	DBHost := "localhost"
+	DBHost := "dbmysql"
 	// ------------------------
 
 	db, err = gorm.Open("mysql", DBUser+":"+DBPass+"@tcp("+DBHost+":3306)/"+DBName+"?charset=utf8&parseTime=True")
@@ -43,14 +42,13 @@ func init() {
 	orderClient.Db = db
 	orderDetailClient.Db = db
 	categoryClient.Db = db
-	cartClient.Db = db
 	addressClient.Db = db
 
 }
 
 func StartDbEngine() {
 	// We need to migrate all classes model.
-	db.AutoMigrate(&model.User{}, &model.Product{}, &model.Order{}, &model.OrderDetail{}, &model.Category{}, &model.Cart{}, &model.Address{})
+	db.AutoMigrate(&model.User{}, &model.Product{}, &model.Order{}, &model.OrderDetail{}, &model.Category{}, &model.Address{})
 
 	log.Info("Finishing Migration Database Tables")
 }

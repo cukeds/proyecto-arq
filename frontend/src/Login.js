@@ -5,7 +5,7 @@ import Cookies from "universal-cookie";
 const Cookie = new Cookies();
 
 async function login(username, password) {
-  return await fetch('http://127.0.0.1:8090/login', {
+  return await fetch('http://localhost:8090/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

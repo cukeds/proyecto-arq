@@ -31,6 +31,18 @@
   float: left;
 }
 
+.topnav p{
+  float: left;
+  vertical-align: middle;
+  font-size: 22px;
+  color: white;
+}
+
+#loading {
+  display: block;
+  margin-left: 33%;
+}
+
 .emptySpace {
   display: block;
   height: 80px;
@@ -38,7 +50,7 @@
 
 .product {
   display: inline-block;
-  width: 50%;
+  width: 70%;
   min-height: 200px;
   border: 2px solid black;
   padding: 4px 8px 4px 8px;
@@ -49,7 +61,7 @@
 
 @media screen and (max-width: 1400px){
   .product {
-    width: 80%;
+    width: 100%;
     min-height: 300px;
   }
 }
@@ -138,21 +150,4 @@
 
 #logo {
   cursor: pointer;
-}
-
-.address {
-  width: 11%;
-  margin-right: 10%;
-  float: right;
-}
-
-.address .addressTitle {
-  font-weight: bolder;
-  font-size: 20px;
-  margin: 5px;
-  display: block;
-}
-
-.address a{
-  font-weight: bold;
 }

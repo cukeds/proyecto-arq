@@ -9,7 +9,7 @@ import Cookies from "universal-cookie";
 const Cookie = new Cookies();
 
 async function getUserById(id){
-    return await fetch('http://127.0.0.1:8090/user/' + id, {
+    return await fetch('http://localhost:8090/user/' + id, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -19,7 +19,7 @@ async function getUserById(id){
 }
 
 async function getOrdersByUserId(id){
-    return await fetch('http://127.0.0.1:8090/orders/' + id, {
+    return await fetch('http://localhost:8090/orders/' + id, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
