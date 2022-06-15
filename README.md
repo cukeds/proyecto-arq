@@ -5,7 +5,7 @@ High priority:
 
 	- ADDRESSES FUNCTIONALITY
 
-Med priority:
+Medium priority:
 
 	- Product by id page
 	- Add items to cart from their product
@@ -17,9 +17,10 @@ Low Priority:
 
 
 # HOW TO RUN
-	## REQUIRES: Docker
+
+## REQUIRES: Docker
 	- docker compose up -d
 	- open localhost:3000
 	- hope for the best
 
-	### TO END DO docker compose down
+### TO END DO docker compose down
