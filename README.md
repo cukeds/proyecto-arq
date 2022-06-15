@@ -1,16 +1,16 @@
-TODO ON WEBSITE:
+# TODO ON WEBSITE:
 
 
-High priority:
+## High priority:
 
 	- ADDRESSES FUNCTIONALITY
 
-Medium priority:
+## Medium priority:
 
 	- Product by id page
 	- Add items to cart from their product
 
-Low Priority:
+## Low Priority:
 
 	- Make things look better
 	- Handle errors
@@ -23,4 +23,5 @@ Low Priority:
 	- open localhost:3000
 	- hope for the best
 
-### TO END DO docker compose down
+### TO END DO
+	- docker compose down
