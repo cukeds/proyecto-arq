@@ -32,7 +32,7 @@ async function postOrder(products, address) {
       quantity: Number(item.quantity),
       price: Number(item.base_price),
       currency_id: "ARS",
-      name: item.name
+      name: item.name,
     }
     details.push(detail)
   });
@@ -221,12 +221,13 @@ function Checkout(){
       return
     }
     setAddress({
-      street: document.getElementById("street").value,
+      street1: document.getElementById("street").value,
       street2: document.getElementById("street2").value,
-      number: document.getElementById("number").value,
+      number: Number(document.getElementById("number").value),
       district: document.getElementById("district").value,
       city: document.getElementById("city").value,
       country: document.getElementById("country").value,
+      user_id: Number(Cookie.get("user_id")),
       bought: true
     })
     setAddressErrors({})

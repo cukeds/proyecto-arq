@@ -151,3 +151,21 @@
 #logo {
   cursor: pointer;
 }
+
+
+.address {
+  width: 10.2%;
+  margin-right: 10%;
+  float: right;
+}
+
+.address .addressTitle {
+  font-weight: bolder;
+  font-size: 20px;
+  margin: 5px;
+  display: block;
+}
+
+.address a{
+  font-weight: bold;
+}

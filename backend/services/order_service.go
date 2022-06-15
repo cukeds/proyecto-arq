@@ -34,6 +34,7 @@ func (s *orderService) GetOrdersByUserId(id int) (dto.OrdersDto, e.ApiError) {
 	for _, order := range orders {
 		var orderDto dto.OrderDto
 		orderDto.OrderId = order.ID
+		orderDto.Address, _ = AddressService.GetAddressById(order.AddressId)
 		orderDto.Date = order.Date
 		orderDto.Total = order.Total
 		orderDto.CurrencyId = order.CurrencyId
@@ -46,8 +47,18 @@ func (s *orderService) GetOrdersByUserId(id int) (dto.OrdersDto, e.ApiError) {
 func (s *orderService) InsertOrder(orderInsertDto dto.OrderInsertDto) (dto.OrderResponseDto, e.ApiError) {
 
 	var order model.Order
+	var addressDto dto.AddressDto
 	var total float32
 	var orderResponseDto dto.OrderResponseDto
+
+	_, err := AddressService.GetAddressById(orderInsertDto.Address.AddressId)
+	if err != nil {
+		addressDto, _ = AddressService.InsertAddress(orderInsertDto.Address)
+	} else {
+		addressDto = orderInsertDto.Address
+	}
+
+	order.AddressId = addressDto.AddressId
 	total = 0
 	order.UserId = orderInsertDto.UserId
 	order.Date = time.Now().Format("2006.01.02 15:04:05")
