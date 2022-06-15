@@ -26,6 +26,15 @@ func GetProducts() model.Products {
 	return products
 }
 
+func GetNProducts(n int) model.Products {
+	var products model.Products
+	Db.Order("product_id asc").Limit(n).Find(&products)
+
+	log.Debug("Products: ", products)
+
+	return products
+}
+
 func RemoveStock(id int, amount int) model.Product {
 	var product model.Product
 	Db.Where("product_id = ?", id).First(&product)
@@ -37,6 +46,14 @@ func RemoveStock(id int, amount int) model.Product {
 func GetProductsByCategoryId(id int) model.Products {
 	var products model.Products
 	Db.Where("category_id = ?", id).Find(&products)
+	log.Debug("Products", products)
+
+	return products
+}
+
+func GetProductsBySearch(query string) model.Products {
+	var products model.Products
+	Db.Where("name LIKE ?", "%"+query+"%").Find(&products)
 	log.Debug("Products", products)
 
 	return products

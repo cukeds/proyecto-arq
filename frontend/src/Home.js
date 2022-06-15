@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import "./css/Home.css";
 import logo from "./images/logo.svg"
 import cart from "./images/cart.svg"
@@ -161,14 +161,24 @@ function deleteCategory(){
   goto("/")
 }
 
+async function getProductBySearch(query){
+  return fetch("http://localhost:8090/products/search="+query, {
+    method: "GET",
+    header: "Content-Type: application/json"
+  }).then(response=>response.json())
+}
+
 
 function Home() {
   const [isLogged, setIsLogged] = useState(false)
   const [user, setUser] = useState({})
   const [categories, setCategories] = useState([])
   const [products, setProducts] = useState([])
+  const [needProducts, setNeedProducts] = useState(true)
   const [category, setCategory] = useState("")
+  const [needCategories, setNeedCategories] = useState(true)
   const [cartItems, setCartItems] = useState("")
+  const [failedSearch, setFailedSearch] = useState(false)
 
 
   if (Cookie.get("user_id") > -1 && !isLogged){
@@ -180,16 +190,39 @@ function Home() {
     setIsLogged(false)
   }
 
-  if(categories.length <= 0){
+  if(!categories.length && needCategories){
     getCategories().then(response => setCategories(response))
+    setNeedCategories(false)
   }
 
-  if (products.length <= 0){
+  if(!products.length && needProducts){
     getProducts().then(response => setProducts(response))
+    setNeedProducts(false)
   }
+
 
   if (!cartItems && Cookie.get("cartItems")){
     setCartItems(Cookie.get("cartItems"))
+  }
+
+
+  async function searchQuery(query){
+    await getProductBySearch(query).then(response=>{
+      if(response != undefined) {
+        setProducts(response)
+        setFailedSearch(false)
+      }
+      else{
+        setProducts([])
+        if(query != ""){
+          setFailedSearch(true)
+        }else{
+          setFailedSearch(false)
+        }
+      }
+    })
+
+
   }
 
   const login = (
@@ -206,23 +239,28 @@ function Home() {
     <img id="loading" src={loadinggif}/>
   )
 
+  const renderFailedSearch = (
+    <a>No results :(</a>
+  )
+
   return (
     <div className="home">
       <div className="topnavHOME">
         <div>
           <img src={logo} width="80px" height="80px" id="logo" onClick={()=>goto("/")} /> <p>3 Random Words Shop</p>
         </div>
-        <input type="text" id="search" placeholder="Search..." onChange={search}/>
+        <input type="text" id="search" placeholder="Search..." onKeyDown={(e) => e.keyCode === 13 ? searchQuery(e.target.value) : void(0)}/>
         {isLogged ? login : <a id="login" onClick={()=>goto("/login")}>Login</a>}
       </div>
 
 
       <div id="mySidenav" className="sidenav">
 
-        {categories.length > 0 ? showCategories(categories, setProducts, setCategory) : <a onClick={retry}> Loading Failed. Click to retry </a>}
+         {categories.length > 0 ? showCategories(categories, setProducts, setCategory) : <a onClick={retry}> Loading Failed. Click to retry </a>}
       </div>
 
       <div id="main">
+        {failedSearch ? renderFailedSearch : void(0)}
         {Cookie.get("category") > 0 ? <a className="categoryFilter"> {category.name} <button className="delete" onClick={deleteCategory}>X</button> </a> : <a/>}
         {products.length > 0 ? showProducts(products, setCartItems) : loading}
 

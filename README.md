@@ -3,7 +3,6 @@
 
 ## High priority:
 
-	- ADDRESSES FUNCTIONALITY
 	- Tests
 
 ## Medium priority:

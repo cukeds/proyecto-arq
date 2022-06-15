@@ -11,20 +11,20 @@ var Db *gorm.DB
 
 func GetAddressById(id int) model.Address {
 	var address model.Address
-	Db.Where("address_id = ?", id).First(&address)
+	Db.Where("id = ?", id).First(&address)
 	log.Debug("Address: ", address)
 
 	return address
 }
 
-// func GetAddresses() model.Addresses {
-// 	var addresses model.Addresses
-// 	Db.Find(&addresses)
-//
-// 	log.Debug("Addresses: ", addresses)
-//
-// 	return addresses
-// }
+func GetAddressesByUserId(id int) model.Addresses {
+	var addresses model.Addresses
+	Db.Where("user_id = ?", id).Find(&addresses)
+
+	log.Debug("Addresses: ", addresses)
+
+	return addresses
+}
 
 func InsertAddress(address model.Address) model.Address {
 	result := Db.Create(&address)
@@ -33,6 +33,6 @@ func InsertAddress(address model.Address) model.Address {
 		//TODO Manage Errors
 		log.Error("")
 	}
-	log.Debug("Address Created: ", address.AddressId)
+	log.Debug("Address Created: ", address.ID)
 	return address
 }
