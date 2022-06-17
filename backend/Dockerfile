@@ -1,11 +1,11 @@
 FROM golang:1.17
 
-ADD . /http://localhost
+ADD . /backend
 
 WORKDIR /http://localhost
 RUN go mod init mvc-go
 RUN go mod tidy
 RUN go build -o mvc-go .
-RUN chmod +x /http://localhost/mvc-go
+RUN chmod +x /backend
 
-ENTRYPOINT ["/http://localhost/mvc-go"]
+ENTRYPOINT ["/backend"]
