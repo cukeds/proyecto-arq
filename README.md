@@ -33,8 +33,6 @@
 
 ## Medium priority:
 
-	- Addresses in user page
-	- Select address from previously saved ones (ez)
 	- Handle errors
 	- Password encryption
 
