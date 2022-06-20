@@ -22,7 +22,7 @@
 ---
 	The code is structured following the MVC pattern (Model View Controller)
 	The code is made so if you have docker you can just run a Docker Compose and
-	everything will work
+	everything will work (hopefully)
 
 # TODO ON WEBSITE:
 
