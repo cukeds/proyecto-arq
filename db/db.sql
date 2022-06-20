@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2022 at 08:25 AM
+-- Generation Time: Jun 20, 2022 at 04:48 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.5
 
@@ -22,33 +22,36 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `addresses` (
-  `address_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `street1` varchar(100) DEFAULT NULL,
-  `street2` varchar(100) DEFAULT NULL,
-  `number` int(11) DEFAULT NULL,
-  `district` varchar(100) DEFAULT NULL,
-  `city` varchar(100) DEFAULT NULL,
-  `country` varchar(100) DEFAULT NULL
+  `street1` varchar(100) NOT NULL,
+  `street2` varchar(100) NOT NULL,
+  `number` int(11) NOT NULL,
+  `district` varchar(100) NOT NULL,
+  `city` varchar(100) NOT NULL,
+  `country` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `addresses`
 --
 
-INSERT INTO `addresses` (`address_id`, `user_id`, `street1`, `street2`, `number`, `district`, `city`, `country`) VALUES
-(2, 0, 'Saturnino Segurola', NULL, 1254, 'Cordoba', 'Cordoba', 'Argentina'),
-(3, 1, 'Wexler Court', NULL, 8, 'Garnerville', 'Mt Ivy', 'United States'),
+INSERT INTO `addresses` (`id`, `user_id`, `street1`, `street2`, `number`, `district`, `city`, `country`) VALUES
+(2, 0, 'Saturnino Segurola', '', 1254, 'Cordoba', 'Cordoba', 'Argentina'),
+(3, 1, 'Wexler Court', '', 8, 'Garnerville', 'Mt Ivy', 'United States'),
 (4, 2, 'Test Street', 'Testing', -9999, '12th District', 'I am city with plenty of spaces and long for visual aid', 'Uganda'),
 (5, 3, 'Jose Otero', 'Av.', 333, 'Urca', 'Cordoba', 'Argentina'),
-(6, 4, 'Marcelo T de Alvear', NULL, 806, 'Guemes', 'Cordoba', 'Argentina'),
-(7, 5, 'Paramount', NULL, 2147483647, 'VeryBigNumber', 'City', 'Chile'),
+(6, 4, 'Marcelo T de Alvear', '', 806, 'Guemes', 'Cordoba', 'Argentina'),
+(17, 5, 'asdasd', '', 123, 'dsad', 'sdasd', 'dsad'),
+(7, 5, 'Paramount', '', 2147483647, 'VeryBigNumber', 'City', 'Chile'),
+(16, 5, 'Street', '', 123, 'Cordoba', 'Cordoba', 'Argentina'),
 (8, 6, 'Mexico', 'Apt', 125, 'Condor Alto', 'Mendiolaza', 'Argentina'),
 (9, 7, 'Armada Argentina', 'Uni', 3300, 'Alta Gracia', 'Cordoba', 'Argentina'),
-(10, 8, 'Street 1', NULL, 0, 'District', 'City', 'Country'),
-(11, 9, 'Rouge St', NULL, 333, 'Rebel', 'Paris', 'France'),
-(12, 10, 'Baker Street', NULL, 221, 'Bakery', 'London', 'England'),
-(13, 11, '3th', NULL, 66, 'Wall Street', 'New York City', 'United States');
+(10, 8, 'Street 1', '', 0, 'District', 'City', 'Country'),
+(11, 9, 'Rouge St', '', 333, 'Rebel', 'Paris', 'France'),
+(12, 10, 'Baker Street', '', 221, 'Bakery', 'London', 'England'),
+(13, 11, '3th', '', 66, 'Wall Street', 'New York City', 'United States'),
+(19, 11, 'Street', '', 123, 'Cordoba', 'Cordoba', 'Argentina');
 
 -- --------------------------------------------------------
 
@@ -92,19 +95,33 @@ INSERT INTO `categories` (`category_id`, `name`, `description`) VALUES
 --
 
 CREATE TABLE `orders` (
-  `order_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `date` date NOT NULL,
   `total` decimal(10,0) NOT NULL,
-  `currency_id` varchar(10) NOT NULL
+  `currency_id` varchar(10) NOT NULL,
+  `address_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`order_id`, `user_id`, `date`, `total`, `currency_id`) VALUES
-(12, 5, '2022-06-09', '7414', 'ARS');
+INSERT INTO `orders` (`id`, `user_id`, `date`, `total`, `currency_id`, `address_id`) VALUES
+(12, 5, '2022-06-09', '7414', 'ARS', 0),
+(13, 1, '2022-06-14', '8400', 'ARS', 0),
+(14, 1, '2022-06-14', '14100', 'ARS', 0),
+(15, 5, '2022-06-15', '1200', 'ARS', 0),
+(16, 5, '2022-06-15', '1200', 'ARS', 0),
+(17, 5, '2022-06-15', '1200', 'ARS', 0),
+(18, 5, '2022-06-15', '2400', 'ARS', 17),
+(19, 5, '2022-06-19', '600', 'ARS', 18),
+(20, 5, '2022-06-19', '600', 'ARS', 0),
+(21, 5, '2022-06-19', '600', 'ARS', 0),
+(22, 5, '2022-06-19', '600', 'ARS', 0),
+(23, 5, '2022-06-19', '600', 'ARS', 0),
+(24, 5, '2022-06-19', '600', 'ARS', 0),
+(25, 5, '2022-06-19', '600', 'ARS', 7);
 
 -- --------------------------------------------------------
 
@@ -128,7 +145,24 @@ CREATE TABLE `order_details` (
 
 INSERT INTO `order_details` (`order_detail_id`, `order_id`, `product_id`, `quantity`, `price`, `currency_id`, `name`) VALUES
 (23, 12, 3, 1, '0', 'ARS', 'Super Mario Maker'),
-(24, 12, 514, 2, '0', 'ARS', 'Rustic Cotton Bike');
+(24, 12, 514, 2, '0', 'ARS', 'Rustic Cotton Bike'),
+(25, 13, 2, 2, '600', 'ARS', '5 Core Processor'),
+(26, 13, 3, 1, '7200', 'ARS', 'Super Mario Maker'),
+(27, 14, 2, 3, '600', 'ARS', '5 Core Processor'),
+(28, 14, 3, 1, '7200', 'ARS', 'Super Mario Maker'),
+(29, 14, 4, 2, '1230', 'ARS', 'Sonic Adventure 2: Battle'),
+(30, 14, 5, 4, '660', 'ARS', 'T-Shirt'),
+(31, 15, 2, 2, '600', 'ARS', '5 Core Processor'),
+(32, 16, 2, 2, '600', 'ARS', '5 Core Processor'),
+(33, 17, 2, 2, '600', 'ARS', '5 Core Processor'),
+(34, 18, 2, 4, '600', 'ARS', '5 Core Processor'),
+(35, 19, 2, 1, '600', 'ARS', '5 Core Processor'),
+(36, 20, 2, 1, '600', 'ARS', '5 Core Processor'),
+(37, 21, 2, 1, '600', 'ARS', '5 Core Processor'),
+(38, 22, 2, 1, '600', 'ARS', '5 Core Processor'),
+(39, 23, 2, 1, '600', 'ARS', '5 Core Processor'),
+(40, 24, 2, 1, '600', 'ARS', '5 Core Processor'),
+(41, 25, 2, 1, '600', 'ARS', '5 Core Processor');
 
 -- --------------------------------------------------------
 
@@ -153,10 +187,10 @@ CREATE TABLE `products` (
 
 INSERT INTO `products` (`product_id`, `category_id`, `name`, `description`, `price`, `currency_id`, `stock`, `picture`) VALUES
 (1, 1, 'Drill', 'Electric Drill that goes BRRRRRRRRRRRRRRRR and then goes Brrrrrrsssss and then a hole appears in your wall and suddenly your wall falls and you\'re left with an open space bathroom because you tried to hang a lovely picture of your cat. ', '300.00', 'ARS', 12, 'electricdrill.jpg'),
-(2, 1, '5 Core Processor', 'You heard of 4 core processors. You heard of 8 core processors. But have you heard of 5 core processors? This is the future. This is when computers go from fast, to slightly faster', '600.00', 'ARS', 700, '5coreprocessor.jpg'),
-(3, 2, 'Super Mario Maker', 'This game will make you wanna cry, and not out of sadness or frustration or laughter, it\'ll just make you wanna cry out of the fact that you suck at it. Deal with it', '7200.00', 'ARS', 30, 'supermariomaker.jpg'),
-(4, 2, 'Sonic Adventure 2: Battle', 'This game has it all. Cutscenes with every character cutting each other off, weird movement, voice lines that make you question reality, and cute animals', '1230.00', 'ARS', 99, 'sa2b.jpg'),
-(5, 3, 'T-Shirt', 'Just a plain old t-shirt. Comes in various colors like yellowy white, slightly tainted white, a faded yellow that looks like white, pink that looks like yellow-ish white, and more!', '660.00', 'ARS', 10000, 'tshirt.jpg'),
+(2, 1, '5 Core Processor', 'You heard of 4 core processors. You heard of 8 core processors. But have you heard of 5 core processors? This is the future. This is when computers go from fast, to slightly faster', '600.00', 'ARS', 678, '5coreprocessor.jpg'),
+(3, 2, 'Super Mario Maker', 'This game will make you wanna cry, and not out of sadness or frustration or laughter, it\'ll just make you wanna cry out of the fact that you suck at it. Deal with it', '7200.00', 'ARS', 28, 'supermariomaker.jpg'),
+(4, 2, 'Sonic Adventure 2: Battle', 'This game has it all. Cutscenes with every character cutting each other off, weird movement, voice lines that make you question reality, and cute animals', '1230.00', 'ARS', 97, 'sa2b.jpg'),
+(5, 3, 'T-Shirt', 'Just a plain old t-shirt. Comes in various colors like yellowy white, slightly tainted white, a faded yellow that looks like white, pink that looks like yellow-ish white, and more!', '660.00', 'ARS', 9996, 'tshirt.jpg'),
 (6, 3, 'Pants', 'How many pants do you need? 1? 2? 3? I hope not more than 3 cause that\'s all the stock we have as of right this second. Oh what\'s that? Nevermind guys we only got TWO pants. That\'s right, only 2!', '999.00', 'ARS', 2, 'pants.jpg'),
 (7, 4, 'The Divine Comedy', 'I have never read this book so I can\'t attest to how good or bad it is. It seems to have some kind of theology talk in it, and it\'s a comedy? Seems disrespectful. Don\'t buy this book. It\'s the devil', '666.00', 'ARS', 666, '666.jpg'),
 (8, 4, 'To Kill a Mockingbird', 'Racism if it met a bird', '33.00', 'ARS', 77, 'tokillamockingbird.jpg'),
@@ -392,7 +426,8 @@ INSERT INTO `users` (`user_id`, `username`, `password`, `first_name`, `last_name
 -- Indexes for table `addresses`
 --
 ALTER TABLE `addresses`
-  ADD PRIMARY KEY (`address_id`),
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `user_id_2` (`user_id`,`street1`,`street2`,`number`,`district`,`city`,`country`),
   ADD KEY `user_id` (`user_id`);
 
 --
@@ -412,7 +447,7 @@ ALTER TABLE `categories`
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
-  ADD PRIMARY KEY (`order_id`),
+  ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
 
 --
@@ -447,7 +482,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `address_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `carts`
@@ -465,13 +500,13 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `order_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `order_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -484,39 +519,4 @@ ALTER TABLE `products`
 --
 ALTER TABLE `users`
   MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `addresses`
---
-ALTER TABLE `addresses`
-  ADD CONSTRAINT `addresses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
-
---
--- Constraints for table `carts`
---
-ALTER TABLE `carts`
-  ADD CONSTRAINT `carts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
-
---
--- Constraints for table `orders`
---
-ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
-
---
--- Constraints for table `order_details`
---
-ALTER TABLE `order_details`
-  ADD CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON UPDATE NO ACTION,
-  ADD CONSTRAINT `order_details_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON UPDATE NO ACTION;
-
---
--- Constraints for table `products`
---
-ALTER TABLE `products`
-  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`);
 COMMIT;
