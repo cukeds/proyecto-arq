@@ -34,6 +34,7 @@ async function getOrderById(id) {
   }).then(response => response.json())
 }
 
+
 function goto(path){
   window.location = window.location.origin + path
 }
@@ -70,6 +71,22 @@ function showProducts(products){
 
 }
 
+function showAddress(address){
+  return (
+    <div className="orderAddress">
+      ADDRESS N°{address.address_id}
+      <div><span className="orderAddressInfo"> Street: </span> <a className="orderAddressInfoLoad">{address.street1}</a> </div>
+      <div><span className="orderAddressInfo"> Street2: </span> <a className="orderAddressInfoLoad">{address.street2} </a> </div>
+      <div><span className="orderAddressInfo"> Number: </span> <a className="orderAddressInfoLoad">{address.number} </a> </div>
+      <div><span className="orderAddressInfo"> District: </span> <a className="orderAddressInfoLoad">{address.district} </a> </div>
+      <div><span className="orderAddressInfo"> City: </span> <a className="orderAddressInfoLoad">{address.city} </a> </div>
+      <div><span className="orderAddressInfo"> Country: </span> <a className="orderAddressInfoLoad">{address.country} </a> </div>
+    </div>
+  )
+
+}
+
+
 async function getOrderProducts(){
   let items = []
   let a = Cookie.get("order").split(";")
@@ -86,6 +103,15 @@ async function getOrderProducts(){
     }
   }
   return items
+}
+
+async function getAddressById(id){
+  return fetch("http://localhost:8090/address/" + id, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }).then(response => response.json())
 }
 
 
@@ -107,6 +133,7 @@ function Order(){
   const [isLogged, setIsLogged] = useState(false);
   const [orderProducts, setOrderProducts] = useState([])
   const [total, setTotal] = useState(0)
+  const [address, setAddress] = useState({})
 
   const login = (
 
@@ -120,6 +147,10 @@ function Order(){
   if (Cookie.get("user_id") > -1 && !isLogged) {
     getUserById(Cookie.get("user_id")).then(response => setUser(response))
     setIsLogged(true)
+
+    if (Cookie.get("address") > -1){
+      getAddressById(Cookie.get("address")).then(response => setAddress(response))
+    }
   }
 
 
@@ -130,7 +161,9 @@ function Order(){
   const complete = (
     <div>
     <div> Woohoo you placed a freaking order. I'm so proud of you</div>
+    {address.address_id != undefined ? showAddress(address) : <span> NOOO </span>}
     {showProducts(orderProducts)}
+
 
     <div> Total: ${total} </div>
     </div>

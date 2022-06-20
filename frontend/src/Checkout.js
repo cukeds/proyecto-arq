@@ -51,6 +51,16 @@ async function postOrder(products, address) {
   })
 }
 
+async function getAddressesByUserId(id){
+    return await fetch('http://localhost:8090/addresses/' + id, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+}).then(response => response.json())
+
+}
+
 function goto(path){
   window.location = window.location.origin + path
 }
@@ -77,6 +87,8 @@ async function getCartProducts(){
   }
   return items
 }
+
+
 
 
 function getOptions(n){
@@ -177,6 +189,7 @@ async function buy(products, address){
       Cookie.set("order", Cookie.get("cart"), {path: "/order"})
       Cookie.set("cart", "", {path: "/"})
       Cookie.set("cartItems", "", {path: "/"})
+      Cookie.set("address", address.address_id, {path: "/order"})
       goto("/order/complete")
     }
   })
@@ -185,15 +198,31 @@ async function buy(products, address){
 }
 }
 
+function getAddresses(addresses){
+  return addresses.map((address) =>
+    <option value={JSON.stringify(address)}> {address.address_id} {address.street1} {address.number} </option>
+)
+}
+
+function fillAddress(address){
+  document.getElementById("street").value = address.street1
+  document.getElementById("street2").value = address.street2
+  document.getElementById("number").value = address.number
+  document.getElementById("district").value = address.district
+  document.getElementById("city").value = address.city
+  document.getElementById("country").value = address.country
+}
+
 function Checkout(){
   const [user, setUser] = useState({});
   const [isLogged, setIsLogged] = useState(false);
   const [cartProducts, setCartProducts] = useState([]);
   const [total, setTotal] = useState(0);
   const [address, setAddress] = useState({});
+  const [addresses, setAddresses] = useState([])
   const [addressErrors, setAddressErrors] = useState({});
 
-  function getAddress(){
+  function getAddress(id = -1){
     let errors = {}
     let stop = false;
     if(document.getElementById("street").value == ""){
@@ -228,7 +257,8 @@ function Checkout(){
       city: document.getElementById("city").value,
       country: document.getElementById("country").value,
       user_id: Number(Cookie.get("user_id")),
-      bought: true
+      bought: true,
+      address_id: id
     })
     setAddressErrors({})
   }
@@ -247,6 +277,7 @@ function Checkout(){
 
   if (Cookie.get("user_id") > -1 && !isLogged) {
     getUserById(Cookie.get("user_id")).then(response => setUser(response))
+    getAddressesByUserId(Cookie.get("user_id")).then(response => setAddresses(response))
     setIsLogged(true)
   }
 
@@ -259,6 +290,19 @@ function Checkout(){
       <span> Total: ${total} </span>
       <button onClick={() => buy(cartProducts, address)}>Pay and Order</button>
     </div>
+  )
+
+  const showAddresses = (
+
+    <select onChange={(e) =>
+      {
+        fillAddress(JSON.parse(e.target.value))
+        getAddress(JSON.parse(e.target.value).address_id)
+      }}>
+     {getAddresses(addresses)}
+    </select>
+
+
   )
 
   return (
@@ -275,6 +319,7 @@ function Checkout(){
       <div id="main">
         {Cookie.get("cart") && Cookie.get("user_id") > -1 ? renderOrderButton : <span/>}
         <div className="address">
+          {addresses.length > 0 ? showAddresses : <span/>}
           <a className="addressTitle">Shipping Address</a>
           <a className="street">Street<input style={addressErrors.street ? {background: "red"} : {background: "white"}} id="street"/></a>
           <a className="street2">Street 2<input style={addressErrors.street2 ? {background: "red"} : {}} id="street2"/></a>

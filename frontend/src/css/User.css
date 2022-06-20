@@ -257,6 +257,7 @@
 }
 
 .order{
+  user-select: none;
   border: 2px solid black;
   border-radius: 20px;
   max-width: 600px;
@@ -333,4 +334,46 @@
 .order .details .detail {
   padding: 2px;
 
+}
+
+.userAddress{
+  user-select: none;
+  border: 2px solid black;
+  border-radius: 20px;
+  width: 300px;
+  cursor: pointer;
+  background: #aafcfc;
+  margin-bottom: 5px;
+  font-size: 22px;
+  text-align: center
+}
+
+.userAddress:hover {
+  transition: 0.1s;
+  background: #52bebe;
+}
+
+.userAddress .addressn {
+  font-weight: bold;
+  padding: 2px 6px;
+}
+
+.userAddress .details {
+  font-size: 16px;
+  border-top: 2px dotted black;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding: 2px 0px;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.userAddress .details .userAddressInfoLoad {
+  margin-left: 10px;
+  float: right;
+
+}
+
+.userAddress .userAddressInfo {
+  font-weight: bold;
 }

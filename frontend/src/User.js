@@ -28,6 +28,16 @@ async function getOrdersByUserId(id){
 
 }
 
+async function getAddressesByUserId(id){
+    return await fetch('http://localhost:8090/addresses/' + id, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+}).then(response => response.json())
+
+}
+
 function goto(path){
   window.location = window.location.origin + path
 }
@@ -70,6 +80,42 @@ function getDetails(details){
   )
 }
 
+function showAddressDetails(id){
+  let div = document.getElementsByClassName("a" + id)
+  for(let detail of div){
+    let show = false;
+    detail.classList.value.split(" ").forEach(c=>{
+      if (c == "hidden"){
+        show = true;
+      }
+    })
+    if(show){
+      detail.classList.remove("hidden")
+    }else{
+      detail.classList.add("hidden")
+    }
+  }
+}
+
+function showUserAddresses(addresses){
+  return addresses.map((address) =>
+
+  <div obj={address} key={address.address_id} className="userAddress" onClick={()=>showAddressDetails(address.address_id)}>
+    <a className="addressn">{address.street1} {address.number}</a>
+    <div className={"details" + " a" + address.address_id + " hidden"}>
+      <div><span className="userAddressInfo"> Street: </span> <a className="userAddressInfoLoad">{address.street1}</a> </div>
+      <div><span className="userAddressInfo"> Street2: </span> <a className="userAddressInfoLoad">{address.street2} </a> </div>
+      <div><span className="userAddressInfo"> Number: </span> <a className="userAddressInfoLoad">{address.number} </a> </div>
+      <div><span className="userAddressInfo"> District: </span> <a className="userAddressInfoLoad">{address.district} </a> </div>
+      <div><span className="userAddressInfo"> City: </span> <a className="userAddressInfoLoad">{address.city} </a> </div>
+      <div><span className="userAddressInfo"> Country: </span> <a className="userAddressInfoLoad">{address.country} </a> </div>
+    </div>
+  </div>
+ )
+}
+
+
+
 function showUserOrders(orders){
   return orders.map((order) =>
 
@@ -97,11 +143,14 @@ function showUserOrders(orders){
  )
 }
 
+
+
 function User() {
   const [isLogged, setIsLogged] = useState(false)
   const [user, setUser] = useState({})
   const [cartItems, setCartItems] = useState("")
   const [orders, setOrders] = useState([])
+  const [addresses, setAddresses] = useState([])
 
 
   if (Cookie.get("user_id") > -1 && !isLogged){
@@ -112,12 +161,10 @@ function User() {
     }
 
     if(Cookie.get("orders") == undefined){
-      getOrdersByUserId(Cookie.get("user_id")).then(response => {
-        if (response != undefined){
-          setOrders(response)
-        }
-      })
+      getOrdersByUserId(Cookie.get("user_id")).then(response => {setOrders(response)})
     }
+
+    getAddressesByUserId(Cookie.get("user_id")).then(response => setAddresses(response))
   }
 
   if (!(Cookie.get("user_id") > -1) && isLogged){
@@ -140,7 +187,7 @@ function User() {
       <div> {user.first_name} {user.last_name} </div>
       <div> Username: {user.username} </div>
       <div> Email: {user.email} </div>
-      <div> Addresses: {user.addresses} </div>
+      <div> Addresses: {addresses.length > 0 ? showUserAddresses(addresses) : <a> No addresses :( </a>} </div>
       <div> Orders: {orders.length > 0 ? showUserOrders(orders) : <a> No orders :( </a>}</div>
     </div>
   )
