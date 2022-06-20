@@ -67,5 +67,9 @@ func GetProductsBySearch(c *gin.Context) {
 		return
 	}
 
+	if len(productsDto) == 0 {
+		c.JSON(http.StatusOK, []dto.ProductDto{})
+		return
+	}
 	c.JSON(http.StatusOK, productsDto)
 }

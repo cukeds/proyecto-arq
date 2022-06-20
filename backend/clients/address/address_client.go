@@ -30,8 +30,8 @@ func InsertAddress(address model.Address) model.Address {
 	result := Db.Create(&address)
 
 	if result.Error != nil {
-		//TODO Manage Errors
-		log.Error("")
+		log.Debug("Address already exists: ", address)
+		return address
 	}
 	log.Debug("Address Created: ", address.ID)
 	return address

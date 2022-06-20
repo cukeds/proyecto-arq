@@ -43,6 +43,7 @@ func (s *addressService) GetAddressesByUserId(id int) (dto.AddressesDto, e.ApiEr
 		addressDto.District = address.District
 		addressDto.City = address.City
 		addressDto.Country = address.Country
+		addressesDto = append(addressesDto, addressDto)
 	}
 	return addressesDto, nil
 }

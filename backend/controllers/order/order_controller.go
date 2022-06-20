@@ -28,6 +28,11 @@ func GetOrdersByUserId(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
+
+	if len(ordersDto) == 0 {
+		c.JSON(http.StatusOK, []dto.OrderDto{})
+		return
+	}
 	c.JSON(http.StatusOK, ordersDto)
 }
 

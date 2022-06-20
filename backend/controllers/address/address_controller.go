@@ -26,7 +26,6 @@ func GetAddressById(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, addressDto)
 		return
 	}
-
 	c.JSON(http.StatusOK, addressDto)
 }
 
@@ -44,6 +43,11 @@ func GetAddressesByUserId(c *gin.Context) {
 	addressesDto, er := service.AddressService.GetAddressesByUserId(id)
 	if er != nil {
 		c.JSON(http.StatusBadRequest, addressesDto)
+		return
+	}
+
+	if len(addressesDto) == 0 {
+		c.JSON(http.StatusOK, []dto.AddressDto{})
 		return
 	}
 
