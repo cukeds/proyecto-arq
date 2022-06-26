@@ -9,7 +9,23 @@ import (
 
 var Db *gorm.DB
 
-func GetOrderDetailById(id int) model.OrderDetail {
+type orderDetailClient struct{}
+
+type OrderDetailClientInterface interface {
+	GetOrderDetailById(id int) model.OrderDetail
+	GetOrderDetailsByOrderId(id int) model.OrderDetails
+	InsertOrderDetail(orderDetail model.OrderDetail) model.OrderDetail
+}
+
+var (
+	OrderDetailClient OrderDetailClientInterface
+)
+
+func init() {
+	OrderDetailClient = &orderDetailClient{}
+}
+
+func (s *orderDetailClient) GetOrderDetailById(id int) model.OrderDetail {
 	var orderDetail model.OrderDetail
 	Db.Where("order_detail_id = ?", id).First(&orderDetail)
 	log.Debug("OrderDetail: ", orderDetail)
@@ -17,7 +33,7 @@ func GetOrderDetailById(id int) model.OrderDetail {
 	return orderDetail
 }
 
-func GetOrderDetailsByOrderId(id int) model.OrderDetails {
+func (s *orderDetailClient) GetOrderDetailsByOrderId(id int) model.OrderDetails {
 	var orderDetails model.OrderDetails
 	Db.Where("order_id = ?", id).Find(&orderDetails)
 
@@ -26,7 +42,7 @@ func GetOrderDetailsByOrderId(id int) model.OrderDetails {
 	return orderDetails
 }
 
-func InsertOrderDetail(orderDetail model.OrderDetail) model.OrderDetail {
+func (s *orderDetailClient) InsertOrderDetail(orderDetail model.OrderDetail) model.OrderDetail {
 	result := Db.Create(&orderDetail)
 
 	if result.Error != nil {

@@ -1,7 +1,7 @@
 package services
 
 import (
-	orderDetailClient "mvc-go/clients/order_detail"
+	client "mvc-go/clients/order_detail"
 	"mvc-go/dto"
 	"mvc-go/model"
 	e "mvc-go/utils/errors"
@@ -9,7 +9,9 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type orderDetailService struct{}
+type orderDetailService struct {
+	orderDetailClient client.OrderDetailClientInterface
+}
 
 type orderDetailServiceInterface interface {
 	InsertDetail(orderDetailDto dto.OrderDetailInsertDto, orderId int) (dto.OrderDetailResponseDto, e.ApiError)
@@ -21,13 +23,19 @@ var (
 	OrderDetailService orderDetailServiceInterface
 )
 
+func initOrderDetailService(orderDetailClient client.OrderDetailClientInterface) orderDetailServiceInterface {
+	service := new(orderDetailService)
+	service.orderDetailClient = orderDetailClient
+	return service
+}
+
 func init() {
-	OrderDetailService = &orderDetailService{}
+	OrderDetailService = initOrderDetailService(client.OrderDetailClient)
 }
 
 func (s *orderDetailService) GetOrderDetailById(id int) (dto.OrderDetailDto, e.ApiError) {
 
-	var orderDetail model.OrderDetail = orderDetailClient.GetOrderDetailById(id)
+	var orderDetail model.OrderDetail = s.orderDetailClient.GetOrderDetailById(id)
 	var orderDetailDto dto.OrderDetailDto
 
 	orderDetailDto.OrderDetailId = orderDetail.OrderDetailId
@@ -41,7 +49,7 @@ func (s *orderDetailService) GetOrderDetailById(id int) (dto.OrderDetailDto, e.A
 }
 
 func (s *orderDetailService) GetOrderDetailsByOrderId(id int) (dto.OrderDetailsDto, e.ApiError) {
-	var orderDetails model.OrderDetails = orderDetailClient.GetOrderDetailsByOrderId(id)
+	var orderDetails model.OrderDetails = s.orderDetailClient.GetOrderDetailsByOrderId(id)
 	var orderDetailsDto dto.OrderDetailsDto
 
 	for _, orderDetail := range orderDetails {
@@ -69,7 +77,7 @@ func (s *orderDetailService) InsertDetail(orderDetailDto dto.OrderDetailInsertDt
 	orderDetail.Name = orderDetailDto.Name
 	orderDetail.Price = orderDetailDto.Price
 
-	orderDetail = orderDetailClient.InsertOrderDetail(orderDetail)
+	orderDetail = s.orderDetailClient.InsertOrderDetail(orderDetail)
 
 	var orderDetailResponseDto dto.OrderDetailResponseDto
 	orderDetailResponseDto.OrderDetailId = orderDetail.OrderDetailId

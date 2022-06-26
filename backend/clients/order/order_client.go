@@ -9,7 +9,23 @@ import (
 
 var Db *gorm.DB
 
-func GetOrderById(id int) model.Order {
+type orderClient struct{}
+
+type OrderClientInterface interface {
+	GetOrderById(id int) model.Order
+	GetOrdersByUserId(id int) model.Orders
+	InsertOrder(order model.Order) model.Order
+}
+
+var (
+	OrderClient OrderClientInterface
+)
+
+func init() {
+	OrderClient = &orderClient{}
+}
+
+func (s *orderClient) GetOrderById(id int) model.Order {
 	var order model.Order
 	Db.Where("id = ?", id).First(&order)
 	log.Debug("Order: ", order)
@@ -17,7 +33,7 @@ func GetOrderById(id int) model.Order {
 	return order
 }
 
-func GetOrdersByUserId(id int) model.Orders {
+func (s *orderClient) GetOrdersByUserId(id int) model.Orders {
 	var orders model.Orders
 	Db.Where("user_id = ?", id).Find(&orders)
 
@@ -26,7 +42,7 @@ func GetOrdersByUserId(id int) model.Orders {
 	return orders
 }
 
-func InsertOrder(order model.Order) model.Order {
+func (s *orderClient) InsertOrder(order model.Order) model.Order {
 
 	result := Db.Create(&order)
 

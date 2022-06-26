@@ -1,7 +1,7 @@
 package services
 
 import (
-	addressClient "mvc-go/clients/address"
+	client "mvc-go/clients/address"
 	"mvc-go/dto"
 	"mvc-go/model"
 	e "mvc-go/utils/errors"
@@ -9,7 +9,9 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type addressService struct{}
+type addressService struct {
+	addressClient client.AddressClientInterface
+}
 
 type addressServiceInterface interface {
 	InsertAddress(addressDto dto.AddressDto) (dto.AddressDto, e.ApiError)
@@ -21,15 +23,23 @@ var (
 	AddressService addressServiceInterface
 )
 
+func initAddressService(addressClient client.AddressClientInterface) addressServiceInterface {
+	service := new(addressService)
+	service.addressClient = addressClient
+	return service
+}
+
 func init() {
-	AddressService = &addressService{}
+	AddressService = initAddressService(client.AddressClient)
 }
 
 func (s *addressService) GetAddressesByUserId(id int) (dto.AddressesDto, e.ApiError) {
 
-	var addresses model.Addresses = addressClient.GetAddressesByUserId(id)
+	var addresses model.Addresses = s.addressClient.GetAddressesByUserId(id)
 	var addressesDto dto.AddressesDto
-
+	if addresses == nil {
+		return addressesDto, e.NewBadRequestApiError("asashdfh")
+	}
 	if len(addresses) == 0 {
 		return addressesDto, e.NewBadRequestApiError("no addresses found for user")
 	}
@@ -59,7 +69,7 @@ func (s *addressService) InsertAddress(addressDto dto.AddressDto) (dto.AddressDt
 	address.District = addressDto.District
 	address.City = addressDto.City
 	address.Country = addressDto.Country
-	address = addressClient.InsertAddress(address)
+	address = s.addressClient.InsertAddress(address)
 
 	addressDto.AddressId = address.ID
 
@@ -70,7 +80,7 @@ func (s *addressService) InsertAddress(addressDto dto.AddressDto) (dto.AddressDt
 func (s *addressService) GetAddressById(id int) (dto.AddressDto, e.ApiError) {
 	var address model.Address
 	var addressDto dto.AddressDto
-	address = addressClient.GetAddressById(id)
+	address = s.addressClient.GetAddressById(id)
 	if address.ID == 0 {
 		return addressDto, e.NewBadRequestApiError("address not found")
 	}

@@ -9,7 +9,23 @@ import (
 
 var Db *gorm.DB
 
-func GetAddressById(id int) model.Address {
+type addressClient struct{}
+
+type AddressClientInterface interface {
+	GetAddressesByUserId(id int) model.Addresses
+	GetAddressById(id int) model.Address
+	InsertAddress(address model.Address) model.Address
+}
+
+var (
+	AddressClient AddressClientInterface
+)
+
+func init() {
+	AddressClient = &addressClient{}
+}
+
+func (s *addressClient) GetAddressById(id int) model.Address {
 	var address model.Address
 	Db.Where("id = ?", id).First(&address)
 	log.Debug("Address: ", address)
@@ -17,7 +33,7 @@ func GetAddressById(id int) model.Address {
 	return address
 }
 
-func GetAddressesByUserId(id int) model.Addresses {
+func (s *addressClient) GetAddressesByUserId(id int) model.Addresses {
 	var addresses model.Addresses
 	Db.Where("user_id = ?", id).Find(&addresses)
 
@@ -26,7 +42,7 @@ func GetAddressesByUserId(id int) model.Addresses {
 	return addresses
 }
 
-func InsertAddress(address model.Address) model.Address {
+func (s *addressClient) InsertAddress(address model.Address) model.Address {
 	result := Db.Create(&address)
 
 	if result.Error != nil {
