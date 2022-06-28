@@ -8,4 +8,4 @@ RUN go mod tidy
 RUN go build -o mvc-go .
 RUN chmod +x /backend
 
-ENTRYPOINT ["/backend"]
+ENTRYPOINT ["/backend/mvc-go"]
