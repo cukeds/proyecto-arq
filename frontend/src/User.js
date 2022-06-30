@@ -34,7 +34,13 @@ async function getAddressesByUserId(id){
     headers: {
       'Content-Type': 'application/json'
     }
-}).then(response => response.json())
+}).then(response => {
+  if(response.status == 200){
+    return response.json()
+  }else{
+    return []
+  }
+})
 
 }
 
@@ -162,9 +168,10 @@ function User() {
 
     if(Cookie.get("orders") == undefined){
       getOrdersByUserId(Cookie.get("user_id")).then(response => {setOrders(response)})
+      getAddressesByUserId(Cookie.get("user_id")).then(response => (setAddresses(response)))
     }
 
-    getAddressesByUserId(Cookie.get("user_id")).then(response => setAddresses(response))
+
   }
 
   if (!(Cookie.get("user_id") > -1) && isLogged){

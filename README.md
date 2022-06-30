@@ -16,7 +16,7 @@
 			- JS:
 			  - React
 			- HTML & CSS
-			
+
 		- DB:
 			- MySQL
 ---
@@ -26,19 +26,16 @@
 
 # TODO ON WEBSITE:
 
-
-## High priority:
-
-	- Tests
-
-## Medium priority:
-
-	- Handle errors
-	- Password encryption
+## High Priority
+	- NOTHING
+	
+## Medium Priority
+	- NOTHING EITHER
 
 ## Low Priority:
 
 	- Make things look better
+	- Handle more and more errors
 
 
 
