@@ -207,18 +207,21 @@ function Home() {
 
 
   async function searchQuery(query){
+
     await getProductBySearch(query).then(response=>{
-      if(response != undefined) {
-        setProducts(response)
-        setFailedSearch(false)
+      console.log(query)
+      if(response != null){
+        if(response.length > 0){
+          setProducts(response)
+          setFailedSearch(false)
+        }else{
+          setProducts([])
+          setFailedSearch(true)
+        }
       }
       else{
-        setProducts([])
-        if(query != ""){
-          setFailedSearch(true)
-        }else{
-          setFailedSearch(false)
-        }
+        setFailedSearch(false)
+        getProducts().then(response=>setProducts(response))
       }
     })
 
@@ -262,7 +265,7 @@ function Home() {
       <div id="main">
         {failedSearch ? renderFailedSearch : void(0)}
         {Cookie.get("category") > 0 ? <a className="categoryFilter"> {category.name} <button className="delete" onClick={deleteCategory}>X</button> </a> : <a/>}
-        {products.length > 0 ? showProducts(products, setCartItems) : loading}
+        {products.length > 0 || failedSearch ? showProducts(products, setCartItems) : loading}
 
 
       </div>

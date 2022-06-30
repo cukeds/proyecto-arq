@@ -142,7 +142,8 @@ func (s *productService) GetProductsByCategoryId(id int) (dto.ProductsDto, e.Api
 }
 
 func (s *productService) GetProductsBySearch(query string) (dto.ProductsDto, e.ApiError) {
-	var products model.Products = s.productClient.GetProductsBySearch(query)
+	var products model.Products
+	products = s.productClient.GetProductsBySearch(query)
 	var productsDto dto.ProductsDto
 
 	for _, product := range products {
