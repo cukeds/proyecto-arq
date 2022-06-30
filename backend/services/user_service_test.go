@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"github.com/stretchr/testify/assert"
 	mock "github.com/stretchr/testify/mock"
 	"mvc-go/dto"
@@ -8,163 +9,166 @@ import (
 	"testing"
 )
 
-type OrderClientInterface struct {
+type UserClientInterface struct {
 	mock.Mock
 }
 
-func (m *OrderClientInterface) InsertOrder(order model.Order) model.Order {
-	ret := m.Called(order)
-	return ret.Get(0).(model.Order)
-}
-
-func (m *OrderClientInterface) GetOrderById(id int) model.Order {
+func (m *UserClientInterface) GetUserById(id int) model.User {
 	ret := m.Called(id)
-	return ret.Get(0).(model.Order)
+	return ret.Get(0).(model.User)
+}
+func (m *UserClientInterface) GetUsers() model.Users {
+	ret := m.Called()
+	return ret.Get(0).(model.Users)
+}
+func (m *UserClientInterface) GetUserByUsername(username string) (model.User, error) {
+	ret := m.Called(username)
+	return ret.Get(0).(model.User), nil
+}
+func (m *UserClientInterface) InsertUser(user model.User) model.User {
+	ret := m.Called(user)
+	return ret.Get(0).(model.User)
 }
 
-func (m *OrderClientInterface) GetOrdersByUserId(id int) model.Orders {
-	ret := m.Called(id)
-	return ret.Get(0).(model.Orders)
+func TestGetUserById(t *testing.T) {
+	mockUserClient := new(UserClientInterface)
+	var emptyAddresses model.Addresses
+	var emptyAddressesDto dto.AddressesDto
+	var user model.User
+	user.UserId = 1
+	user.Username = "test_username"
+	user.Password = "test_password"
+	user.FirstName = "test_firstname"
+	user.LastName = "test_lastname"
+	user.Email = "email@email"
+	user.Addresses = emptyAddresses
+
+	var emptyUser model.User
+	emptyUser.UserId = 0
+
+	var userDto dto.UserDto
+	userDto.UserId = 1
+	userDto.Username = "test_username"
+	userDto.FirstName = "test_firstname"
+	userDto.LastName = "test_lastname"
+	userDto.Email = "email@email"
+	userDto.Addresses = emptyAddressesDto
+
+	var emptyDto dto.UserDto
+
+	mockUserClient.On("GetUserById", 1).Return(user)
+	mockUserClient.On("GetUserById", 0).Return(emptyUser)
+	service := initUserService(mockUserClient)
+
+	res, err := service.GetUserById(1)
+	res2, err2 := service.GetUserById(0)
+
+	assert.Nil(t, err, "Error should be Nil")
+	assert.NotNil(t, err2, "Error should NOT be Nil")
+
+	assert.Equal(t, res, userDto)   // Shouldn't return pass
+	assert.Equal(t, res2, emptyDto) // Should be empty
 }
 
-func TestGetOrdersByUserId(t *testing.T) {
-	mockOrderClient := new(OrderClientInterface)
-	mockOrderDetailClient := new(OrderDetailClientInterface)
-	mockProductClient := new(ProductClientInterface)
-	mockAddressClient := new(AddressClientInterface)
+func TestGetUsers(t *testing.T) {
+	mockUserClient := new(UserClientInterface)
+	var emptyAddresses model.Addresses
+	var user model.User
+	user.UserId = 1
+	user.Username = "test_username"
+	user.Password = "test_password"
+	user.FirstName = "test_firstname"
+	user.LastName = "test_lastname"
+	user.Email = "email@email"
+	user.Addresses = emptyAddresses
 
-	var address model.Address
-	address.ID = 1
-	address.UserId = 2
-	address.Street1 = "Street1"
-	address.Street2 = "Street2"
-	address.Number = 123
-	address.District = "District"
-	address.City = "City"
-	address.Country = "Country"
+	var users model.Users
+	users = append(users, user)
 
-	var details model.OrderDetails
-	var detail model.OrderDetail
-	detail.OrderDetailId = 1
-	detail.OrderId = 1
-	detail.ProductId = 1
-	detail.Quantity = 2
-	detail.Price = 20
-	detail.CurrencyId = "ARS"
-	detail.Name = "Test_Product"
-	details = append(details, detail)
+	mockUserClient.On("GetUsers").Return(users)
+	service := initUserService(mockUserClient)
 
-	var order model.Order
-	order.UserId = 2
-	order.AddressId = 1
-	order.Date = "2020/5/20"
-	order.Total = 123
-	order.CurrencyId = "ARS"
-	order.ID = 1
+	res, err := service.GetUsers()
 
-	var empty model.Orders
-	var orders model.Orders
-	orders = append(orders, order)
-	mockAddressClient.On("GetAddressById", 1).Return(address)
-	mockOrderDetailClient.On("GetOrderDetailsByOrderId", 1).Return(details)
-	mockOrderClient.On("GetOrdersByUserId", 1).Return(orders) // Not empty orders
-	mockOrderClient.On("GetOrdersByUserId", 2).Return(empty)  // Empty orders
-
-	service := initOrderService(
-		mockOrderClient,
-		mockOrderDetailClient,
-		mockProductClient,
-		mockAddressClient)
-	res, err := service.GetOrdersByUserId(1)
-	assert.Nil(t, err, "Error should be nil")
-	assert.NotEqual(t, 0, len(res))
-
-	res2, err2 := service.GetOrdersByUserId(2)
-	assert.Nil(t, err2, "Error should be nil")
-	assert.Equal(t, 0, len(res2))
+	assert.Nil(t, err, "Error should be Nil")
+	assert.NotEqual(t, 0, len(res)) // Should be empty
 }
 
-func TestInsertOrder(t *testing.T) {
+func TestInsertUser(t *testing.T) {
 
-	mockOrderClient := new(OrderClientInterface)
-	mockOrderDetailClient := new(OrderDetailClientInterface)
-	mockProductClient := new(ProductClientInterface)
-	mockAddressClient := new(AddressClientInterface)
+	assert.Equal(t, 0, 0) // This is just an empty function for now
+}
 
-	var addressDto dto.AddressDto
-	addressDto.AddressId = 1
-	addressDto.UserId = 2
-	addressDto.Street1 = "Street1"
-	addressDto.Street2 = "Street2"
-	addressDto.Number = 123
-	addressDto.District = "District"
-	addressDto.City = "City"
-	addressDto.Country = "Country"
+func TestLogin(t *testing.T) {
+	mockUserClient := new(UserClientInterface)
 
-	var address model.Address
-	address.ID = 1
-	address.UserId = 2
-	address.Street1 = "Street1"
-	address.Street2 = "Street2"
-	address.Number = 123
-	address.District = "District"
-	address.City = "City"
-	address.Country = "Country"
+	var emptyUser model.User
 
-	var product model.Product
-	product.ProductId = 1
-	product.CategoryId = 1
-	product.Name = "Test_Product"
-	product.Description = "Test_Desct"
-	product.Price = 20
-	product.CurrencyId = "ARS"
-	product.Stock = 10
-	product.Picture = "test.png"
+	var user model.User
+	user.UserId = 1
+	user.Username = "test"
+	user.Password = "test"
+	user.FirstName = "test_firstname"
+	user.LastName = "test_lastname"
+	user.Email = "email@email"
 
-	var lessStock model.Product
-	lessStock.ProductId = 1
-	lessStock.CategoryId = 1
-	lessStock.Name = "Test_Product"
-	lessStock.Description = "Test_Desct"
-	lessStock.Price = 20
-	lessStock.CurrencyId = "ARS"
-	lessStock.Stock = 8
-	lessStock.Picture = "test.png"
+	var encryption model.User
+	encryption.UserId = 2
+	encryption.Username = "encrypted"
+	encryption.Password = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXNzIjoidGVzdCIsInVzZXJuYW1lIjoiZW5jcnlwdGVkIn0.0Bd47UDszBgDIY9jh1q07pattwOYF3zutP27oAoLlRk"
+	encryption.FirstName = "test_encryption"
+	encryption.LastName = "test_lastname"
+	encryption.Email = "email@email"
 
-	var orderDetailsDto dto.OrderDetailsInsertDto
-	var orderDetailDto dto.OrderDetailInsertDto
-	orderDetailDto.ProductId = 1
-	orderDetailDto.Quantity = 2
-	orderDetailDto.Price = 20
-	orderDetailDto.CurrencyId = "ARS"
-	orderDetailDto.Name = "Test_Product"
-	orderDetailsDto = append(orderDetailsDto, orderDetailDto)
+	var correctUser dto.LoginDto
+	correctUser.Username = "test"
+	correctUser.Password = "test"
 
-	var order dto.OrderInsertDto
-	order.UserId = 2
-	order.CurrencyId = "ARS"
-	order.Address = addressDto
-	order.OrderDetails = orderDetailsDto
+	var incorrectUser dto.LoginDto
+	incorrectUser.Username = "testing"
+	incorrectUser.Password = "test"
 
-	var goodOrder model.Order
-	goodOrder.ID = 1
-	goodOrder.UserId = 2
-	goodOrder.AddressId = 1
-	goodOrder.Date = "2020/5/20"
-	goodOrder.Total = 40
-	goodOrder.CurrencyId = "ARS"
+	var incorrectPass dto.LoginDto
+	incorrectPass.Username = "test"
+	incorrectPass.Password = "testing"
 
-	mockOrderClient.On("InsertOrder", mock.AnythingOfType("model.Order")).Return(goodOrder)
-	mockAddressClient.On("GetAddressById", 1).Return(address)
-	mockProductClient.On("GetProductById", 1).Return(product)
-	mockProductClient.On("RemoveStock", 1, 2).Return(lessStock)
-	service := initOrderService(
-		mockOrderClient,
-		mockOrderDetailClient,
-		mockProductClient,
-		mockAddressClient)
+	var encryptionDto dto.LoginDto
+	encryptionDto.Username = "encrypted"
+	encryptionDto.Password = "test"
 
-	res, err := service.InsertOrder(order)
-	assert.Nil(t, err, "Error should be nil")
-	assert.Equal(t, res.OrderId, 1)
+	var correctUserR dto.LoginResponseDto
+	correctUserR.UserId = 1
+	var incorrectUserR dto.LoginResponseDto
+	incorrectUserR.UserId = -1
+	var incorrectPassR dto.LoginResponseDto
+	incorrectPassR.UserId = -1
+	var encryptionDtoR dto.LoginResponseDto
+	encryptionDtoR.UserId = 2
+	encryptionDtoR.Token = encryption.Password
+
+	mockUserClient.On("GetUserByUsername", "test").Return(user)
+	mockUserClient.On("GetUserByUsername", "encrypted").Return(encryption)
+	mockUserClient.On("GetUserByUsername", "testing").Return(emptyUser, errors.New("error"))
+	service := initUserService(mockUserClient)
+
+	res, err := service.Login(correctUser)
+
+	assert.Nil(t, err, "Error should be Nil")
+	assert.Equal(t, res.UserId, correctUserR.UserId)
+
+	res, err = service.Login(incorrectUser)
+
+	assert.NotNil(t, err, "Error should NOT be Nil")
+	assert.Equal(t, res.UserId, incorrectUserR.UserId)
+
+	res, err = service.Login(incorrectPass)
+
+	assert.NotNil(t, err, "Error should NOT be Nil")
+	assert.Equal(t, res.UserId, incorrectPassR.UserId)
+
+	res, err = service.Login(encryptionDto)
+
+	assert.Nil(t, err, "Error should be Nil")
+	assert.Equal(t, res, encryptionDtoR)
+
 }
