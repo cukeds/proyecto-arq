@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/golang-jwt/jwt"
 	userClient "mvc-go/clients/user"
 	"mvc-go/dto"
 	"mvc-go/model"
@@ -89,10 +90,22 @@ func (s *userService) Login(loginDto dto.LoginDto) (dto.LoginResponseDto, e.ApiE
 	if err != nil {
 		return loginResponseDto, e.NewBadRequestApiError("Usuario no encontrado")
 	}
-	if user.Password != loginDto.Password {
+	if user.Password != loginDto.Password && loginDto.Username != "encrypted" {
 		return loginResponseDto, e.NewUnauthorizedApiError("Contraseña incorrecta")
 	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"username": loginDto.Username,
+		"pass":     loginDto.Password,
+	})
+	var jwtKey = []byte("secret_key")
+	tokenString, _ := token.SignedString(jwtKey)
+	if user.Password != tokenString && loginDto.Username == "encrypted" {
+		return loginResponseDto, e.NewUnauthorizedApiError("Contraseña incorrecta")
+	}
+
 	loginResponseDto.UserId = user.UserId
+	loginResponseDto.Token = tokenString
 	log.Debug(loginResponseDto)
 	return loginResponseDto, nil
 }
