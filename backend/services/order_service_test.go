@@ -27,25 +27,6 @@ func (m *OrderClientInterface) GetOrdersByUserId(id int) model.Orders {
 	return ret.Get(0).(model.Orders)
 }
 
-type OrderDetailClientInterface struct {
-	mock.Mock
-}
-
-func (m *OrderDetailClientInterface) GetOrderDetailById(id int) model.OrderDetail {
-	ret := m.Called(id)
-	return ret.Get(0).(model.OrderDetail)
-}
-
-func (m *OrderDetailClientInterface) GetOrderDetailsByOrderId(id int) model.OrderDetails {
-	ret := m.Called(id)
-	return ret.Get(0).(model.OrderDetails)
-}
-
-func (m *OrderDetailClientInterface) InsertOrderDetail(orderDetail model.OrderDetail) model.OrderDetail {
-	ret := m.Called(orderDetail)
-	return ret.Get(0).(model.OrderDetail)
-}
-
 func TestGetOrdersByUserId(t *testing.T) {
 	mockOrderClient := new(OrderClientInterface)
 	mockOrderDetailClient := new(OrderDetailClientInterface)
